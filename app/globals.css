@@ -1,0 +1,127 @@
+@import "tailwindcss";
+
+/*
+  ============================================================
+  DESIGN TOKENS — Phase 0.5 Design System Foundation
+  ============================================================
+  Every value here is documented in DESIGN_SYSTEM.md. Don't
+  hardcode a color/spacing/radius value in a component — use
+  these tokens (via Tailwind classes below) so the whole app
+  stays visually consistent and easy to re-theme later.
+*/
+
+:root {
+  /* --- Neutrals (warm paper, not stark white/black) --- */
+  --color-paper: #fafaf8;      /* page background */
+  --color-surface: #ffffff;    /* cards, panels, inputs */
+  --color-line: #e6e4e0;       /* borders, dividers */
+  --color-line-strong: #d4d1cb;
+
+  --color-ink: #17171a;        /* primary text */
+  --color-slate: #6b6b72;      /* secondary text */
+  --color-muted: #a3a2a8;      /* placeholder/disabled text */
+
+  /* --- Brand (signal) --- */
+  --color-signal: #0e6b5c;        /* primary actions, active nav, focus ring */
+  --color-signal-hover: #0b5648;
+  --color-signal-soft: #e3f1ee;   /* tinted backgrounds for signal */
+
+  /* --- Secondary accent (used sparingly) --- */
+  --color-amber: #c2760c;
+  --color-amber-soft: #fbf0dd;
+
+  /* --- Semantic status colors --- */
+  --color-success: #1c8a5e;
+  --color-success-soft: #e5f4ed;
+  --color-warning: #c2760c;
+  --color-warning-soft: #fbf0dd;
+  --color-danger: #d1373f;
+  --color-danger-soft: #fbe9ea;
+  --color-info: #2a63c4;
+  --color-info-soft: #e9f0fc;
+
+  /* --- Pipeline stage colors (signature motif — see DESIGN_SYSTEM.md) ---
+     Every stage of Inquiry → Lead → Client → Project → Invoice → Paid
+     gets one fixed color used consistently in dots, badges, and
+     sidebar indicators, so status is recognizable at a glance. */
+  --color-stage-inquiry: #6b6b72;
+  --color-stage-lead: #2a63c4;
+  --color-stage-client: #0e6b5c;
+  --color-stage-project: #7a4fc9;
+  --color-stage-invoice: #c2760c;
+  --color-stage-paid: #1c8a5e;
+
+  /* --- Radius scale --- */
+  --radius-sm: 6px;   /* badges, small inputs */
+  --radius-md: 10px;  /* buttons, inputs */
+  --radius-lg: 14px;  /* cards, panels */
+  --radius-xl: 20px;  /* dialogs, large surfaces */
+
+  /* --- Shadow (one subtle token, used sparingly) --- */
+  --shadow-soft: 0 1px 2px rgba(23, 23, 26, 0.04), 0 4px 12px rgba(23, 23, 26, 0.05);
+  --shadow-dialog: 0 12px 32px rgba(23, 23, 26, 0.16);
+}
+
+@theme inline {
+  --color-paper: var(--color-paper);
+  --color-surface: var(--color-surface);
+  --color-line: var(--color-line);
+  --color-line-strong: var(--color-line-strong);
+  --color-ink: var(--color-ink);
+  --color-slate: var(--color-slate);
+  --color-muted: var(--color-muted);
+
+  --color-signal: var(--color-signal);
+  --color-signal-hover: var(--color-signal-hover);
+  --color-signal-soft: var(--color-signal-soft);
+
+  --color-amber: var(--color-amber);
+  --color-amber-soft: var(--color-amber-soft);
+
+  --color-success: var(--color-success);
+  --color-success-soft: var(--color-success-soft);
+  --color-warning: var(--color-warning);
+  --color-warning-soft: var(--color-warning-soft);
+  --color-danger: var(--color-danger);
+  --color-danger-soft: var(--color-danger-soft);
+  --color-info: var(--color-info);
+  --color-info-soft: var(--color-info-soft);
+
+  --color-stage-inquiry: var(--color-stage-inquiry);
+  --color-stage-lead: var(--color-stage-lead);
+  --color-stage-client: var(--color-stage-client);
+  --color-stage-project: var(--color-stage-project);
+  --color-stage-invoice: var(--color-stage-invoice);
+  --color-stage-paid: var(--color-stage-paid);
+
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Consistent, visible keyboard focus ring across every interactive element */
+:focus-visible {
+  outline: 2px solid var(--color-signal);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
