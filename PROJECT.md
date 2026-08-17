@@ -49,13 +49,14 @@ Any new feature must be built **within** this approved structure. If a feature g
 
 ```
 agency-crm/
-├── app/                # Routing only (App Router pages)
-├── features/           # Business logic per module (leads, clients, projects, auth, etc.)
-├── components/         # Shared, reusable UI (buttons, tables, modals, layout)
-├── lib/                # Supabase clients, utility functions
-├── public/             # Static assets, PWA icons
-├── types/              # Shared/generated TypeScript types
-├── proxy.ts            # Route protection (Next.js 16's renamed middleware.ts)
+├── app/ # Routing only (App Router pages)
+├── features/ # Business logic per module (leads, clients, projects, auth, etc.)
+├── components/ # Shared, reusable UI (buttons, tables, modals, layout)
+├── lib/ # Supabase clients, utility functions
+├── public/ # Static assets, PWA icons
+├── types/ # Shared/generated TypeScript types
+├── supabase/migrations/ # SQL migration files (standard Supabase CLI convention — added Phase 3)
+├── proxy.ts # Route protection (Next.js 16's renamed middleware.ts)
 ```
 
 ---
@@ -109,7 +110,9 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ---
 
+---
+
 ## 8. Current Phase
 
-**Phase 2 — Authentication** (complete, pending review)
-Supabase Auth is wired up: `/login`, session persistence, protected dashboard routes via `proxy.ts` (Next.js 16's renamed `middleware.ts`), real sign-out. `features/auth/` added following the same feature-based pattern as every other module. No other business features implemented yet. See `TASKS.md` for live status.
+**Phase 3 — Inquiries** (complete, pending review)
+First real database table (`inquiries`) is live via SQL migration, with RLS restricting reads/writes to authenticated team members. `/inquiries` page supports viewing, manual entry, and status management. Public `POST /api/inquiries` endpoint is ready for the existing website's contact form to call, using a shared-secret + service-role pattern that never exposes privileged access to the browser. See `TASKS.md` for live status.

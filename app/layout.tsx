@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import Script from "next/script";
+
 import "./globals.css";
 import { AuthProvider } from "@/features/auth/AuthContext";
 
@@ -10,8 +12,8 @@ export const metadata: Metadata = {
   title: "Agency CRM",
   description: "Internal CRM — inquiries to invoices, in one place.",
   appleWebApp: {
-    // This is what makes "Add to Home Screen" behave like a real app on iPhone
-    // instead of just bookmarking the website.
+    // This is what makes "Add to Home Screen" behave like a real app
+    // on iPhone instead of just bookmarking the website.
     capable: true,
     statusBarStyle: "default",
     title: "Agency CRM",
@@ -22,24 +24,24 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({
+  children,
+}: LayoutProps<"/">) {
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
         <AuthProvider>{children}</AuthProvider>
-        {/* Registers the service worker so the app can be installed and
-            load its basic shell even with a flaky connection. */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              if ('serviceWorker' in navigator) {
-                window.addEventListener('load', () => {
-                  navigator.serviceWorker.register('/sw.js').catch(() => {});
-                });
-              }
-            `,
-          }}
-        />
+
+        {/* Register the service worker after the app becomes interactive */}
+        <Script id="register-service-worker" strategy="afterInteractive">
+          {`
+            if ('serviceWorker' in navigator) {
+              window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(() => {});
+              });
+            }
+          `}
+        </Script>
       </body>
     </html>
   );

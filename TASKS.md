@@ -57,10 +57,20 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez creates a real user in Supabase Auth and confirms login/logout work live**
 - ⬜ **Rameez approves Phase 2**
 
-## Phase 3 — Inquiries ⬜
-- ⬜ Manual inquiry entry (internal)
-- ⬜ Public API endpoint for website contact form
-- ⬜ Inquiries list + status management
+## Phase 3 — Inquiries 🔄
+- ✅ SQL migration: `inquiries` table with RLS (authenticated-only read/write, no public policy)
+- ✅ `types/inquiry.ts` — shared type definitions
+- ✅ `features/inquiries/api.ts` — data-access functions
+- ✅ `components/ui/Select.tsx` — added to design system (status dropdown)
+- ✅ Manual inquiry entry (`NewInquiryDialog`)
+- ✅ Public API endpoint for website contact form (`POST /api/inquiries`, shared-secret + service-role pattern, CORS-ready)
+- ✅ Inquiries list + status management (`/inquiries`, `InquiriesView`)
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ✅ Verified: API endpoint correctly rejects missing/wrong secret (401) and missing fields (400)
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260813120000_create_inquiries_table.sql`)
+- ⬜ **Rameez sets `SUPABASE_SERVICE_ROLE_KEY`, `INQUIRY_API_SECRET`, `WEBSITE_ORIGIN` in `.env.local`**
+- ⬜ **Rameez wires the live website's contact form to POST to `/api/inquiries`**
+- ⬜ **Rameez approves Phase 3**
 
 ## Phase 4 — Leads ⬜
 - ⬜ Convert inquiry → lead
