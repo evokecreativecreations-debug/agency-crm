@@ -72,9 +72,17 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez wires the live website's contact form to POST to `/api/inquiries`**
 - ⬜ **Rameez approves Phase 3**
 
-## Phase 4 — Leads ⬜
-- ⬜ Convert inquiry → lead
-- ⬜ Lead status management
+## Phase 4 — Leads 🔄
+- ✅ SQL migration: `leads` table with RLS (authenticated-only, same pattern as `inquiries`), `inquiry_id` FK (nullable, `on delete set null`)
+- ✅ `types/lead.ts` — shared type definitions
+- ✅ `features/leads/api.ts` — `getLeads`, `createLead`, `updateLeadStatus`, `convertInquiryToLead`
+- ✅ Convert inquiry → lead (`ConvertInquiryDialog`, launched from `/inquiries`)
+- ✅ Automatic inquiry status update to `converted_to_lead` on successful conversion (single action, reuses `updateInquiryStatus` from Phase 3)
+- ✅ Lead status management (`/leads`, `LeadsView`, optimistic updates — Contacted/Negotiating/Won/Lost)
+- ✅ Reused existing components throughout (Table, Badge, Select, Dialog, Input, Textarea, Button, EmptyState, PageHeader) — no new design-system components needed
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260814090000_create_leads_table.sql`)
+- ⬜ **Rameez approves Phase 4**
 
 ## Phase 5 — Clients ⬜
 - ⬜ Convert lead → client

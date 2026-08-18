@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 3 — Inquiries** (complete, pending review)
-First real database table (`inquiries`) is live via SQL migration, with RLS restricting reads/writes to authenticated team members. `/inquiries` page supports viewing, manual entry, and status management. Public `POST /api/inquiries` endpoint is ready for the existing website's contact form to call, using a shared-secret + service-role pattern that never exposes privileged access to the browser. See `TASKS.md` for live status.
+**Phase 4 — Leads** (complete, pending review)
+Second database table (`leads`) is live via migration, same RLS pattern as `inquiries`. `/leads` supports viewing and status management (Contacted/Negotiating/Won/Lost). Inquiries can now be converted into Leads directly from `/inquiries` — this creates the lead and automatically updates the source inquiry's status to `converted_to_lead` in one action. See `TASKS.md` for live status.
