@@ -99,8 +99,20 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260815090000_create_clients_table.sql`)
 - ⬜ **Rameez approves Phase 5**
 
-## Phase 6 — Projects ⬜
-- ⬜ Create/manage projects under a client
+## Phase 6 — Projects 🔄
+- ✅ SQL migration: `projects` table with RLS (authenticated-only, same pattern as prior modules), `client_id` FK **not null** (first required FK in the schema — every project must belong to exactly one client), `on delete cascade`
+- ✅ `types/project.ts` — `Project`, `ProjectStatus`, `NewProjectInput`, `ProjectUpdateInput`
+- ✅ `features/projects/api.ts` — `getProjects`, `getProjectsByClientId`, `getProjectById`, `createProject`, `updateProject`, `updateProjectStatus` (thin wrapper over `updateProject`, avoids duplicated update logic)
+- ✅ `features/projects/components/NewProjectDialog.tsx` — one reusable dialog for both entry points (client picker from `/projects`, pre-locked client from a Client's detail page) rather than two separate components
+- ✅ `features/projects/components/ProjectsView.tsx` — list, inline status Select (optimistic update, same pattern as `LeadsView`), empty state
+- ✅ `features/projects/components/ProjectDetailView.tsx` — read-only detail page (client link, timeline, description); status shown as a Badge, not editable here
+- ✅ `features/projects/components/ClientProjectsCard.tsx` — the "Projects" section embedded on a Client's detail page (Client Integration requirement)
+- ✅ Client Integration: creating a project from a Client's detail page automatically attaches it to that client (`lockedClientId`)
+- ✅ Routing: `/projects`, `/projects/[id]`, plus `loading.tsx` for both (Next.js built-in convention, reusing `Skeleton`/`TableRowSkeleton`)
+- ✅ Reused existing components throughout (PageHeader, Table, Button, Badge, Dialog, Select, Typography, EmptyState, Input, Textarea) — no new design-system components, no redesign
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260816090000_create_projects_table.sql`)
+- ⬜ **Rameez approves Phase 6**
 
 ## Phase 7 — Tasks ⬜
 - ⬜ Task management inside a project

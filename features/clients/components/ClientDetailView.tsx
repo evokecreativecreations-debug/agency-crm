@@ -1,13 +1,16 @@
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Body, Caption, Eyebrow, H1 } from "@/components/ui/Typography";
+import { ClientProjectsCard } from "@/features/projects/components/ClientProjectsCard";
 import type { Client } from "@/types/client";
 import type { Lead } from "@/types/lead";
+import type { Project } from "@/types/project";
 import { Building2, Calendar, Mail, Phone, StickyNote, Users } from "lucide-react";
 
 interface ClientDetailViewProps {
   client: Client;
   relatedLead: Lead | null;
+  projects: Project[];
 }
 
 function formatDate(iso: string) {
@@ -31,7 +34,7 @@ const LEAD_STATUS_LABEL: Record<Lead["status"], string> = {
  * frozen schema), so this stays a plain server-renderable component —
  * no "use client" directive.
  */
-export function ClientDetailView({ client, relatedLead }: ClientDetailViewProps) {
+export function ClientDetailView({ client, relatedLead, projects }: ClientDetailViewProps) {
   return (
     <div className="space-y-6">
       <div>
@@ -88,6 +91,8 @@ export function ClientDetailView({ client, relatedLead }: ClientDetailViewProps)
           </CardContent>
         </Card>
       </div>
+
+      <ClientProjectsCard client={client} initialProjects={projects} />
 
       <Card>
         <CardHeader>

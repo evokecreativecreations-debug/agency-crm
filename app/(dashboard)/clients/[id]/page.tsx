@@ -2,13 +2,14 @@ import { DashboardShell } from "@/components/layout/DashboardShell";
 import { ClientDetailView } from "@/features/clients/components/ClientDetailView";
 import { getClientById } from "@/features/clients/api";
 import { getLeadById } from "@/features/leads/api";
+import { getProjectsByClientId } from "@/features/projects/api";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
 /**
  * /clients/[id] — protected by proxy.ts (the "/clients" prefix check in
  * proxy.ts already covers nested paths like this one). Fetches the
- * client and, if it came from a lead, that lead's details too.
+ * client, its related lead (if any), and its projects (Phase 6).
  */
 export default async function ClientDetailPage({
   params,
@@ -21,11 +22,14 @@ export default async function ClientDetailPage({
   const client = await getClientById(supabase, id);
   if (!client) notFound();
 
-  const relatedLead = client.lead_id ? await getLeadById(supabase, client.lead_id) : null;
+  const [relatedLead, projects] = await Promise.all([
+    client.lead_id ? getLeadById(supabase, client.lead_id) : Promise.resolve(null),
+    getProjectsByClientId(supabase, client.id),
+  ]);
 
   return (
     <DashboardShell pageTitle={client.full_name}>
-      <ClientDetailView client={client} relatedLead={relatedLead} />
+      <ClientDetailView client={client} relatedLead={relatedLead} projects={projects} />
     </DashboardShell>
   );
 }

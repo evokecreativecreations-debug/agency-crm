@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 5 — Clients** (complete, pending review)
-Third database table (`clients`) is live via migration, same RLS pattern as `inquiries`/`leads`, plus a unique constraint on `lead_id` to prevent double-conversion at the database level. `/clients` supports viewing, working search (name/company/email), and links through to `/clients/[id]` for a read-only detail page (contact info, notes, related lead). Leads can now be converted into Clients directly from `/leads` — this creates the client and automatically updates the source lead's status to `won` in one action. See `TASKS.md` for live status.
+**Phase 6 — Projects** (complete, pending review)
+Fourth database table (`projects`) is live via migration — the first table with a required (non-nullable) foreign key, since every project must belong to exactly one client. `/projects` lists all projects across every client with inline status management (Planning/In Progress/In Revision/Completed/On Hold), and `/projects/[id]` shows a read-only detail view. A project can be created either from `/projects` (client picker) or directly from a client's detail page (client pre-locked) — one shared dialog handles both. See `TASKS.md` for live status.
