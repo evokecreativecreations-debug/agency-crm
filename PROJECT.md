@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 4 — Leads** (complete, pending review)
-Second database table (`leads`) is live via migration, same RLS pattern as `inquiries`. `/leads` supports viewing and status management (Contacted/Negotiating/Won/Lost). Inquiries can now be converted into Leads directly from `/inquiries` — this creates the lead and automatically updates the source inquiry's status to `converted_to_lead` in one action. See `TASKS.md` for live status.
+**Phase 5 — Clients** (complete, pending review)
+Third database table (`clients`) is live via migration, same RLS pattern as `inquiries`/`leads`, plus a unique constraint on `lead_id` to prevent double-conversion at the database level. `/clients` supports viewing, working search (name/company/email), and links through to `/clients/[id]` for a read-only detail page (contact info, notes, related lead). Leads can now be converted into Clients directly from `/leads` — this creates the client and automatically updates the source lead's status to `won` in one action. See `TASKS.md` for live status.

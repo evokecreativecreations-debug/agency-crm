@@ -19,6 +19,17 @@ export async function getLeads(supabase: SupabaseClient): Promise<Lead[]> {
   return data as Lead[];
 }
 
+export async function getLeadById(supabase: SupabaseClient, id: string): Promise<Lead | null> {
+  const { data, error } = await supabase
+    .from("leads")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
+  return data as Lead | null;
+}
+
 export async function createLead(
   supabase: SupabaseClient,
   input: NewLeadInput

@@ -1,6 +1,7 @@
 "use client";
 
 import { Badge } from "@/components/ui/Badge";
+import { Button } from "@/components/ui/Button";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { Select } from "@/components/ui/Select";
@@ -13,15 +14,18 @@ import {
   TableRow,
 } from "@/components/ui/Table";
 import { Caption } from "@/components/ui/Typography";
+import { ConvertLeadDialog } from "@/features/clients/components/ConvertLeadDialog";
 import { updateLeadStatus } from "@/features/leads/api";
 import { createClient } from "@/lib/supabase/client";
 import type { Lead, LeadStatus } from "@/types/lead";
-import { Users } from "lucide-react";
+import { ArrowRight, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface LeadsViewProps {
   initialLeads: Lead[];
+  /** IDs of leads that already have a client (already converted). */
+  convertedLeadIds: string[];
 }
 
 const STATUS_LABEL: Record<LeadStatus, string> = {
@@ -42,16 +46,22 @@ function formatDate(iso: string) {
 }
 
 /**
- * LeadsView — list + status management for Leads. Same structure as
- * InquiriesView (optimistic status updates, EmptyState when empty).
+ * LeadsView — list + status management for Leads, plus the "Convert to
+ * Client" action (Phase 5). Same structure as InquiriesView (optimistic
+ * status updates, EmptyState when empty).
  *
- * Note: "Won" doesn't yet trigger Lead → Client conversion — that's
- * Phase 5. For now it's just a status you can set manually.
+ * Clients have no status column, so "already converted" is derived from
+ * `convertedLeadIds` (see features/clients/api.ts getConvertedLeadIds)
+ * rather than a status value — once a lead is in that set, its status
+ * dropdown is replaced with a "Client" badge and the convert button
+ * disappears, mirroring how InquiriesView handles converted_to_lead.
  */
-export function LeadsView({ initialLeads }: LeadsViewProps) {
+export function LeadsView({ initialLeads, convertedLeadIds }: LeadsViewProps) {
   const router = useRouter();
   const [leads, setLeads] = useState(initialLeads);
+  const [convertedIds, setConvertedIds] = useState(() => new Set(convertedLeadIds));
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [convertingLead, setConvertingLead] = useState<Lead | null>(null);
 
   async function handleStatusChange(id: string, status: LeadStatus) {
     setUpdatingId(id);
@@ -64,6 +74,15 @@ export function LeadsView({ initialLeads }: LeadsViewProps) {
       setUpdatingId(null);
       router.refresh();
     }
+  }
+
+  function handleConverted(leadId: string) {
+    // Optimistic update — ConvertLeadDialog has already confirmed the
+    // conversion succeeded server-side (client created + lead marked
+    // "won") before calling this, so this just reflects it instantly.
+    setConvertedIds((prev) => new Set(prev).add(leadId));
+    setLeads((prev) => prev.map((l) => (l.id === leadId ? { ...l, status: "won" } : l)));
+    router.refresh();
   }
 
   return (
@@ -90,55 +109,84 @@ export function LeadsView({ initialLeads }: LeadsViewProps) {
               <TableHeaderCell>Source</TableHeaderCell>
               <TableHeaderCell>Status</TableHeaderCell>
               <TableHeaderCell>Created</TableHeaderCell>
+              <TableHeaderCell>Actions</TableHeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {leads.map((lead) => (
-              <TableRow key={lead.id}>
-                <TableCell className="font-medium">{lead.full_name}</TableCell>
-                <TableCell>
-                  <div className="flex flex-col">
-                    <span>{lead.email}</span>
-                    {lead.phone && <Caption>{lead.phone}</Caption>}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  {lead.notes ? (
-                    <p className="max-w-xs truncate text-ink" title={lead.notes}>
-                      {lead.notes}
-                    </p>
-                  ) : (
-                    <Caption>—</Caption>
-                  )}
-                </TableCell>
-                <TableCell>
-                  <Badge variant={lead.inquiry_id ? "inquiry" : "neutral"}>
-                    {lead.inquiry_id ? "From Inquiry" : "Manual"}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  <Select
-                    aria-label={`Status for ${lead.full_name}`}
-                    value={lead.status}
-                    disabled={updatingId === lead.id}
-                    onChange={(e) => handleStatusChange(lead.id, e.target.value as LeadStatus)}
-                    className="h-8 min-w-[9.5rem] text-xs"
-                  >
-                    {ALL_STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {STATUS_LABEL[status]}
-                      </option>
-                    ))}
-                  </Select>
-                </TableCell>
-                <TableCell>
-                  <Caption>{formatDate(lead.created_at)}</Caption>
-                </TableCell>
-              </TableRow>
-            ))}
+            {leads.map((lead) => {
+              const isConverted = convertedIds.has(lead.id);
+              return (
+                <TableRow key={lead.id}>
+                  <TableCell className="font-medium">{lead.full_name}</TableCell>
+                  <TableCell>
+                    <div className="flex flex-col">
+                      <span>{lead.email}</span>
+                      {lead.phone && <Caption>{lead.phone}</Caption>}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    {lead.notes ? (
+                      <p className="max-w-xs truncate text-ink" title={lead.notes}>
+                        {lead.notes}
+                      </p>
+                    ) : (
+                      <Caption>—</Caption>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={lead.inquiry_id ? "inquiry" : "neutral"}>
+                      {lead.inquiry_id ? "From Inquiry" : "Manual"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {isConverted ? (
+                      <Badge variant="client">Client</Badge>
+                    ) : (
+                      <Select
+                        aria-label={`Status for ${lead.full_name}`}
+                        value={lead.status}
+                        disabled={updatingId === lead.id}
+                        onChange={(e) =>
+                          handleStatusChange(lead.id, e.target.value as LeadStatus)
+                        }
+                        className="h-8 min-w-[9.5rem] text-xs"
+                      >
+                        {ALL_STATUSES.map((status) => (
+                          <option key={status} value={status}>
+                            {STATUS_LABEL[status]}
+                          </option>
+                        ))}
+                      </Select>
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    <Caption>{formatDate(lead.created_at)}</Caption>
+                  </TableCell>
+                  <TableCell>
+                    {!isConverted && (
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setConvertingLead(lead)}
+                      >
+                        Convert to Client <ArrowRight className="h-3.5 w-3.5" />
+                      </Button>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       )}
+
+      <ConvertLeadDialog
+        key={convertingLead?.id ?? "none"}
+        open={convertingLead !== null}
+        lead={convertingLead}
+        onClose={() => setConvertingLead(null)}
+        onConverted={handleConverted}
+      />
     </>
   );
 }

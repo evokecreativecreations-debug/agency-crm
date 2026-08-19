@@ -84,9 +84,20 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260814090000_create_leads_table.sql`)
 - ⬜ **Rameez approves Phase 4**
 
-## Phase 5 — Clients ⬜
-- ⬜ Convert lead → client
-- ⬜ Client list + detail page
+## Phase 5 — Clients 🔄
+- ✅ SQL migration: `clients` table with RLS (authenticated-only, same pattern as `inquiries`/`leads`), `lead_id` FK (nullable, `on delete set null`), `unique` constraint on `lead_id` to prevent duplicate conversions at the DB level
+- ✅ `types/client.ts` — shared type definitions
+- ✅ `features/clients/api.ts` — `getClients`, `getClientById`, `getConvertedLeadIds`, `convertLeadToClient` (app-level duplicate-conversion guard + DB constraint as second line of defense)
+- ✅ `features/leads/api.ts` — added `getLeadById` (needed for the Client Detail page's Related Lead card)
+- ✅ Convert lead → client (`ConvertLeadDialog`, launched from `/leads`)
+- ✅ Automatic lead status update to `won` on successful conversion (reuses `updateLeadStatus` from Phase 4, same pattern as Phase 4's inquiry conversion)
+- ✅ Clients list with working search (name/company/email, client-side filter using the existing `SearchBar` component) and empty states (no clients yet vs. no search matches)
+- ✅ Client detail page (`/clients/[id]`) — contact details, notes, related lead card, metadata; 404s via `notFound()` for an unknown ID
+- ✅ Loading states for both `/clients` and `/clients/[id]` via Next.js's built-in `loading.tsx` convention, reusing `Skeleton`/`TableRowSkeleton`
+- ✅ Reused existing components throughout — no new design-system components were needed
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260815090000_create_clients_table.sql`)
+- ⬜ **Rameez approves Phase 5**
 
 ## Phase 6 — Projects ⬜
 - ⬜ Create/manage projects under a client
