@@ -114,9 +114,19 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260816090000_create_projects_table.sql`)
 - ⬜ **Rameez approves Phase 6**
 
-## Phase 7 — Tasks ⬜
-- ⬜ Task management inside a project
+## Phase 7 — Tasks 🔄
+- ✅ SQL migration: `tasks` table with RLS (authenticated-only, same pattern as prior modules), `project_id` FK **not null**, `on delete cascade`; includes `assigned_to` (nullable FK to `auth.users`, unused until team members exist)
+- ✅ `types/task.ts` — `Task`, `TaskStatus`, `NewTaskInput`, `UpdateTaskInput` (no `priority`/`updated_at` — not in the frozen blueprint schema)
+- ✅ `features/tasks/api.ts` — `getTasks(projectId)`, `getTaskById`, `createTask`, `updateTask`, `updateTaskStatus` (thin wrapper over `updateTask`); no `deleteTask` — the blueprint specifies no delete policy for any table so far
+- ✅ `features/tasks/components/TaskFormDialog.tsx` — one reusable dialog for both create and edit (same approach as `NewProjectDialog`)
+- ✅ `features/tasks/components/ProjectTasksCard.tsx` — the "Tasks" section embedded on a Project's detail page: list, inline status Select (optimistic update), edit-on-click, empty state
+- ✅ Project Integration: tasks always stay linked to their project; no standalone `/tasks` route added (matches the frozen nav config — tasks aren't a top-level module)
+- ✅ Reused existing components throughout (Card, Button, Select, Dialog, Input, Textarea, Typography) — no new design-system components, no redesign
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260818090000_create_tasks_table.sql`)
+- ⬜ **Rameez approves Phase 7**
 
+> Note: `supabase/migrations/20260817090000_create_invoices_table.sql` also exists from a mislabeled earlier request — it's correct, blueprint-compliant Phase 9 content, just created out of order. It isn't referenced by any code yet and won't be until Phase 9 actually begins.
 ## Phase 8 — Revisions ⬜
 - ⬜ Revision round tracking
 

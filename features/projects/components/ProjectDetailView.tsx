@@ -5,14 +5,17 @@ import {
   PROJECT_STATUS_BADGE_VARIANT,
   PROJECT_STATUS_LABEL,
 } from "@/features/projects/components/ProjectsView";
+import { ProjectTasksCard } from "@/features/tasks/components/ProjectTasksCard";
 import type { Client } from "@/types/client";
 import type { Project } from "@/types/project";
+import type { Task } from "@/types/task";
 import { Building2, Calendar, CalendarClock, FileText } from "lucide-react";
 import Link from "next/link";
 
 interface ProjectDetailViewProps {
   project: Project;
   client: Client | null;
+  tasks: Task[];
 }
 
 function formatDate(iso: string | null) {
@@ -30,7 +33,7 @@ function formatDate(iso: string | null) {
  * status dropdown lives on the /projects list page, same split used
  * between ClientDetailView (read-only) and LeadsView (interactive).
  */
-export function ProjectDetailView({ project, client }: ProjectDetailViewProps) {
+export function ProjectDetailView({ project, client, tasks }: ProjectDetailViewProps) {
   const startDate = formatDate(project.start_date);
   const dueDate = formatDate(project.due_date);
 
@@ -85,6 +88,8 @@ export function ProjectDetailView({ project, client }: ProjectDetailViewProps) {
           </CardContent>
         </Card>
       </div>
+
+      <ProjectTasksCard projectId={project.id} initialTasks={tasks} />
 
       <Card>
         <CardHeader>

@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 6 — Projects** (complete, pending review)
-Fourth database table (`projects`) is live via migration — the first table with a required (non-nullable) foreign key, since every project must belong to exactly one client. `/projects` lists all projects across every client with inline status management (Planning/In Progress/In Revision/Completed/On Hold), and `/projects/[id]` shows a read-only detail view. A project can be created either from `/projects` (client picker) or directly from a client's detail page (client pre-locked) — one shared dialog handles both. See `TASKS.md` for live status.
+**Phase 7 — Tasks** (complete, pending review)
+Fifth database table (`tasks`) is live via migration — every task belongs to exactly one project. There is no standalone `/tasks` page (matches the blueprint: tasks aren't a top-level nav item) — instead, `/projects/[id]` now includes a Tasks card where you can view, create, edit, and change the status of every task for that project. Note: a leftover, unwired `invoices` migration also exists from a premature earlier attempt at Phase 9 — it's harmless (blueprint-compliant, nothing references it yet) and will be picked up properly when Phase 9 begins. See `TASKS.md` for live status.
