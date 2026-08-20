@@ -127,8 +127,17 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez approves Phase 7**
 
 > Note: `supabase/migrations/20260817090000_create_invoices_table.sql` also exists from a mislabeled earlier request — it's correct, blueprint-compliant Phase 9 content, just created out of order. It isn't referenced by any code yet and won't be until Phase 9 actually begins.
-## Phase 8 — Revisions ⬜
-- ⬜ Revision round tracking
+## Phase 8 — Revisions 🔄
+- ✅ SQL migration: `revisions` table with RLS (authenticated-only, same pattern as prior modules), `project_id` FK **not null**, `on delete cascade`, `unique(project_id, round_number)` to prevent round-number collisions
+- ✅ `types/revision.ts` — `Revision`, `RevisionStatus`, `NewRevisionInput`, `UpdateRevisionInput` (single `feedback` field + `round_number`, matching the frozen schema — no separate title/notes, no requested_at/completed_at/updated_at)
+- ✅ `features/revisions/api.ts` — `getRevisions(projectId)` (oldest-first, for a readable history), `getRevisionById`, `createRevision` (auto-assigns the next `round_number` per project), `updateRevision`, `updateRevisionStatus` (thin wrapper over `updateRevision`)
+- ✅ `features/revisions/components/RevisionFormDialog.tsx` — one reusable dialog for both create and edit (same approach as `TaskFormDialog`/`NewProjectDialog`)
+- ✅ `features/revisions/components/ProjectRevisionsCard.tsx` — the "Revisions" section embedded on a Project's detail page: full history list, inline status Select (optimistic update), click-to-edit feedback, empty state
+- ✅ Project Integration: revisions always stay linked to their project; no standalone `/revisions` route added (matches the frozen nav config, same reasoning as Tasks in Phase 7)
+- ✅ Reused existing components throughout (Card, Button, Select, Dialog, Textarea, Typography) — no new design-system components, no redesign
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260819090000_create_revisions_table.sql`)
+- ⬜ **Rameez approves Phase 8**
 
 ## Phase 9 — Invoices ⬜
 - ⬜ Generate invoices per project

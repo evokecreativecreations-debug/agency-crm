@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 7 — Tasks** (complete, pending review)
-Fifth database table (`tasks`) is live via migration — every task belongs to exactly one project. There is no standalone `/tasks` page (matches the blueprint: tasks aren't a top-level nav item) — instead, `/projects/[id]` now includes a Tasks card where you can view, create, edit, and change the status of every task for that project. Note: a leftover, unwired `invoices` migration also exists from a premature earlier attempt at Phase 9 — it's harmless (blueprint-compliant, nothing references it yet) and will be picked up properly when Phase 9 begins. See `TASKS.md` for live status.
+**Phase 8 — Revisions** (complete, pending review)
+Sixth database table (`revisions`) is live via migration — every revision belongs to exactly one project, with round numbers (1, 2, 3...) auto-assigned per project rather than typed by hand, enforced by a `unique(project_id, round_number)` constraint. Same as Tasks (Phase 7), there is no standalone `/revisions` page — `/projects/[id]` now includes a Revisions card showing the full oldest-first history, with create/edit/status-change all available inline. See `TASKS.md` for live status.
