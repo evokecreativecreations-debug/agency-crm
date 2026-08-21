@@ -114,5 +114,5 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 
 ## 8. Current Phase
 
-**Phase 8 — Revisions** (complete, pending review)
-Sixth database table (`revisions`) is live via migration — every revision belongs to exactly one project, with round numbers (1, 2, 3...) auto-assigned per project rather than typed by hand, enforced by a `unique(project_id, round_number)` constraint. Same as Tasks (Phase 7), there is no standalone `/revisions` page — `/projects/[id]` now includes a Revisions card showing the full oldest-first history, with create/edit/status-change all available inline. See `TASKS.md` for live status.
+**Phase 9 — Invoices** (complete, pending review)
+Seventh database table (`invoices`) is live — this reused a migration created ahead of schedule back in Phase 7's aside rather than creating a duplicate. Invoice numbers (`INV-0001`, `INV-0002`, ...) are generated automatically, sequential across the whole agency. `/projects/[id]` now includes an Invoices card (list, create, inline status management across draft/sent/partially_paid/paid/overdue) below Tasks and Revisions. See `TASKS.md` for live status.

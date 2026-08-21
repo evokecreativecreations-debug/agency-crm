@@ -139,9 +139,18 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260819090000_create_revisions_table.sql`)
 - ⬜ **Rameez approves Phase 8**
 
-## Phase 9 — Invoices ⬜
-- ⬜ Generate invoices per project
-
+## Phase 9 — Invoices 🔄
+- ✅ SQL migration reused from Phase 7's aside: `invoices` table with RLS (authenticated-only, same pattern as prior modules), `project_id` FK **not null**, `on delete cascade`, `unique` `invoice_number`
+- ✅ `types/invoice.ts` — `Invoice`, `InvoiceStatus`, `NewInvoiceInput`, `UpdateInvoiceInput` (amount + due_date only, matching the frozen schema — no issued_date/notes column)
+- ✅ `features/invoices/api.ts` — `getInvoices(projectId)`, `getInvoiceById`, `createInvoice` (auto-generates the next sequential `INV-XXXX` number, globally across the agency), `updateInvoice`, `updateInvoiceStatus` (thin wrapper over `updateInvoice`)
+- ✅ `features/invoices/components/InvoiceStatusBadge.tsx` — read-only status indicator, reused Badge variants, exports the label/variant maps
+- ✅ `features/invoices/components/InvoiceFormDialog.tsx` — one reusable dialog for both create and edit (amount, due date); amount validated `> 0` client-side
+- ✅ `features/invoices/components/InvoicesCard.tsx` — the "Invoices" section embedded on a Project's detail page: list, inline status Select (optimistic update) + status badge, click-to-edit amount/due date, empty state
+- ✅ Project Integration: invoices always stay linked to their project; card placed below Tasks and Revisions on `/projects/[id]`, no standalone `/invoices` route added (same reasoning as Tasks/Revisions)
+- ✅ Reused existing components throughout (Card, Button, Select, Dialog, Input, Badge, Typography) — no new design-system components, no redesign
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260817090000_create_invoices_table.sql`)
+- ⬜ **Rameez approves Phase 9**
 ## Phase 10 — Payments ⬜
 - ⬜ Record payments against invoices
 

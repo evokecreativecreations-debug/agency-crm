@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/Badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import { Body, Caption, Eyebrow, H1 } from "@/components/ui/Typography";
+import { InvoicesCard } from "@/features/invoices/components/InvoicesCard";
 import {
   PROJECT_STATUS_BADGE_VARIANT,
   PROJECT_STATUS_LABEL,
@@ -8,6 +9,7 @@ import {
 import { ProjectRevisionsCard } from "@/features/revisions/components/ProjectRevisionsCard";
 import { ProjectTasksCard } from "@/features/tasks/components/ProjectTasksCard";
 import type { Client } from "@/types/client";
+import type { Invoice } from "@/types/invoice";
 import type { Project } from "@/types/project";
 import type { Revision } from "@/types/revision";
 import type { Task } from "@/types/task";
@@ -19,6 +21,7 @@ interface ProjectDetailViewProps {
   client: Client | null;
   tasks: Task[];
   revisions: Revision[];
+  invoices: Invoice[];
 }
 
 function formatDate(iso: string | null) {
@@ -36,7 +39,13 @@ function formatDate(iso: string | null) {
  * status dropdown lives on the /projects list page, same split used
  * between ClientDetailView (read-only) and LeadsView (interactive).
  */
-export function ProjectDetailView({ project, client, tasks, revisions }: ProjectDetailViewProps) {
+export function ProjectDetailView({
+  project,
+  client,
+  tasks,
+  revisions,
+  invoices,
+}: ProjectDetailViewProps) {
   const startDate = formatDate(project.start_date);
   const dueDate = formatDate(project.due_date);
 
@@ -95,6 +104,8 @@ export function ProjectDetailView({ project, client, tasks, revisions }: Project
       <ProjectTasksCard projectId={project.id} initialTasks={tasks} />
 
       <ProjectRevisionsCard projectId={project.id} initialRevisions={revisions} />
+
+      <InvoicesCard projectId={project.id} initialInvoices={invoices} />
 
       <Card>
         <CardHeader>
