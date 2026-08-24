@@ -111,8 +111,7 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 ---
 
 ---
-
 ## 8. Current Phase
 
-**Phase 9 — Invoices** (complete, pending review)
-Seventh database table (`invoices`) is live — this reused a migration created ahead of schedule back in Phase 7's aside rather than creating a duplicate. Invoice numbers (`INV-0001`, `INV-0002`, ...) are generated automatically, sequential across the whole agency. `/projects/[id]` now includes an Invoices card (list, create, inline status management across draft/sent/partially_paid/paid/overdue) below Tasks and Revisions. See `TASKS.md` for live status.
+**Phase 10 — Payments** (complete, pending review)
+Eighth database table (`payments`) is live — the first module with a delete policy (correcting a mis-entered payment is a real need, unlike the intentionally-unsupported deletion elsewhere). Every invoice can now have multiple payments; the invoice's status (draft/sent/partially_paid/paid) recalculates automatically after every payment change, reusing the Phase 9 invoice API rather than duplicating that logic. Payments are managed from a "Payments" button per invoice row on `/projects/[id]` and `/invoices`, opening a wider modal (`Dialog` gained an optional `size` prop, defaulting to the original width for every existing dialog) with totals, history, and add/edit/delete. The top-level `/payments` route (already linked from the sidebar) was initially missed and has since been added, using a small `PaymentsCardStandalone` client wrapper — required because Server Components can't pass function props directly to Client Components.

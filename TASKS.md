@@ -151,8 +151,22 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260817090000_create_invoices_table.sql`)
 - ⬜ **Rameez approves Phase 9**
-## Phase 10 — Payments ⬜
-- ⬜ Record payments against invoices
+## Phase 10 — Payments 🔄
+- ✅ SQL migration: `payments` table with RLS, `invoice_id` FK **not null**, `on delete cascade`; the **first module with a delete policy** (correcting a mis-entered payment is a real need, unlike arbitrary deletion elsewhere)
+- ✅ `types/payment.ts` — `Payment`, `PaymentMethod`, `NewPaymentInput`, `UpdatePaymentInput`
+- ✅ `features/payments/api.ts` — `getPayments(invoiceId)`, `getPaymentById`, `createPayment`, `updatePayment`, `deletePayment`, plus an internal `syncInvoiceStatus` that reuses `getInvoiceById`/`updateInvoiceStatus` from Phase 9 instead of duplicating invoice logic
+- ✅ Automatic invoice status sync after every create/update/delete: 0 paid → sent (draft stays draft), partial → `partially_paid`, full → `paid`
+- ✅ Payments can never exceed an invoice's remaining balance — enforced both server-side (`api.ts`, before any write) and client-side (`PaymentFormDialog`, before submit)
+- ✅ `features/payments/components/PaymentHistoryTable.tsx` — presentational list with edit/delete row actions
+- ✅ `features/payments/components/PaymentFormDialog.tsx` — one reusable dialog for both create and edit
+- ✅ `features/payments/components/PaymentsCard.tsx` — totals (Invoice Total / Total Paid / Remaining Balance), history, add/edit/delete, with a delete-confirmation step
+- ✅ Invoice Integration: a "Payments" button per invoice row on `InvoicesCard` opens the above in a modal
+- ✅ `components/ui/Dialog.tsx` — added an optional `size` prop (`"md"` default, `"lg"` for the payments modal) — backward compatible, every other dialog in the app is unaffected
+- ✅ `app/(dashboard)/payments/page.tsx` + `loading.tsx` — top-level `/payments` route (was missing, causing a 404 despite `lib/navigation.ts` already linking to it)
+- ✅ `features/payments/components/PaymentsCardStandalone.tsx` — thin client wrapper so `PaymentsCard`'s required `onInvoiceChange` prop can be supplied safely from a Server Component page (React Server Components can't pass functions as props to Client Components)
+- ✅ Verified: `npm run build`, `npx tsc --noEmit`, `npm run lint` all pass with zero errors
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260821090000_create_payments_table.sql`)
+- ⬜ **Rameez approves Phase 10**
 
 ## Phase 11 — Services Catalog ⬜
 - ⬜ Create/manage services

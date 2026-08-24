@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
+import { Dialog } from "@/components/ui/Dialog";
 import { Select } from "@/components/ui/Select";
 import { Caption, Mono } from "@/components/ui/Typography";
 import { InvoiceFormDialog } from "@/features/invoices/components/InvoiceFormDialog";
@@ -10,9 +11,10 @@ import {
   InvoiceStatusBadge,
 } from "@/features/invoices/components/InvoiceStatusBadge";
 import { updateInvoiceStatus } from "@/features/invoices/api";
+import { PaymentsCard } from "@/features/payments/components/PaymentsCard";
 import { createClient } from "@/lib/supabase/client";
 import type { Invoice, InvoiceStatus } from "@/types/invoice";
-import { Pencil, Plus } from "lucide-react";
+import { Pencil, Plus, Receipt } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -42,6 +44,9 @@ function formatDate(iso: string | null) {
  * this project). Same isolated-interactivity approach as
  * ProjectTasksCard/ProjectRevisionsCard — the one client component
  * embedded into the otherwise server-rendered ProjectDetailView.
+ *
+ * Phase 10 adds a "Payments" action per row, opening PaymentsCard inside
+ * a wider Dialog (size="lg").
  */
 export function InvoicesCard({ projectId, initialInvoices }: InvoicesCardProps) {
   const router = useRouter();
@@ -49,6 +54,7 @@ export function InvoicesCard({ projectId, initialInvoices }: InvoicesCardProps) 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingInvoice, setEditingInvoice] = useState<Invoice | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [managingPaymentsFor, setManagingPaymentsFor] = useState<Invoice | null>(null);
 
   function handleCreated(invoice: Invoice) {
     setInvoices((prev) => [invoice, ...prev]);
@@ -71,6 +77,12 @@ export function InvoicesCard({ projectId, initialInvoices }: InvoicesCardProps) 
       setUpdatingId(null);
       router.refresh();
     }
+  }
+
+  function handleInvoiceChangedByPayment(invoice: Invoice) {
+    setInvoices((prev) => prev.map((i) => (i.id === invoice.id ? invoice : i)));
+    setManagingPaymentsFor(invoice);
+    router.refresh();
   }
 
   return (
@@ -120,6 +132,13 @@ export function InvoicesCard({ projectId, initialInvoices }: InvoicesCardProps) 
                         </option>
                       ))}
                     </Select>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setManagingPaymentsFor(invoice)}
+                    >
+                      <Receipt className="h-3.5 w-3.5" /> Payments
+                    </Button>
                   </div>
                 </li>
               );
@@ -143,6 +162,22 @@ export function InvoicesCard({ projectId, initialInvoices }: InvoicesCardProps) 
         onClose={() => setEditingInvoice(null)}
         onSaved={handleEdited}
       />
+
+      <Dialog
+        open={managingPaymentsFor !== null}
+        onClose={() => setManagingPaymentsFor(null)}
+        title={managingPaymentsFor ? `Payments — ${managingPaymentsFor.invoice_number}` : "Payments"}
+        description="Record and review payments against this invoice."
+        size="lg"
+      >
+        {managingPaymentsFor && (
+          <PaymentsCard
+            key={managingPaymentsFor.id}
+            invoice={managingPaymentsFor}
+            onInvoiceChange={handleInvoiceChangedByPayment}
+          />
+        )}
+      </Dialog>
     </Card>
   );
 }

@@ -12,7 +12,20 @@ interface DialogProps {
   description?: string;
   children?: ReactNode;
   footer?: ReactNode;
+  /**
+   * Panel width. Defaults to "md" (max-w-md), the original and still
+   * most common size — every dialog before Phase 10 relied on this
+   * default and is completely unaffected. "lg" (max-w-2xl) is for
+   * content that genuinely needs more room, like a data table (see
+   * PaymentsCard's payment history).
+   */
+  size?: "md" | "lg";
 }
+
+const SIZE_CLASS: Record<NonNullable<DialogProps["size"]>, string> = {
+  md: "max-w-md",
+  lg: "max-w-2xl",
+};
 
 /**
  * Dialog — modal for focused tasks: confirmations, quick forms (e.g.
@@ -24,7 +37,15 @@ interface DialogProps {
  * Don't use Dialog for anything that needs its own URL/back-button
  * behavior (like a full project detail page) — use a route for that.
  */
-export function Dialog({ open, onClose, title, description, children, footer }: DialogProps) {
+export function Dialog({
+  open,
+  onClose,
+  title,
+  description,
+  children,
+  footer,
+  size = "md",
+}: DialogProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<Element | null>(null);
 
@@ -68,7 +89,8 @@ export function Dialog({ open, onClose, title, description, children, footer }: 
         aria-labelledby="dialog-title"
         tabIndex={-1}
         className={cn(
-          "relative z-10 w-full max-w-md rounded-[var(--radius-xl)] bg-surface shadow-[var(--shadow-dialog)]",
+          "relative z-10 w-full rounded-[var(--radius-xl)] bg-surface shadow-[var(--shadow-dialog)]",
+          SIZE_CLASS[size],
           "focus:outline-none"
         )}
       >
