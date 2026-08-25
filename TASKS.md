@@ -168,8 +168,13 @@ Legend: ✅ Done · 🔄 In Progress · ⬜ Not Started
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260821090000_create_payments_table.sql`)
 - ⬜ **Rameez approves Phase 10**
 
-## Phase 11 — Services Catalog ⬜
-- ⬜ Create/manage services
+Phase 11 — Services Catalog 🔄
+- ✅ SQL migration: `services` table with authenticated-only RLS, plus the blueprint-approved optional `projects.service_id` link
+- ✅ `types/service.ts` and `features/services/api.ts` — catalog types and server/browser-safe data access
+- ✅ `/services` catalog — add, edit, search, retire, and reactivate services without deleting historical records
+- ✅ New-project service picker — active catalog services can be linked to a project from either project creation entry point
+- ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260822090000_create_services_table.sql`)
+- ⬜ **Rameez approves Phase 11**
 
 ## Phase 12 — Activity Log ⬜
 - ⬜ Core logging system (foundation for Notifications, Messages, Timeline)
