@@ -3,6 +3,7 @@ import { ClientDetailView } from "@/features/clients/components/ClientDetailView
 import { getClientById } from "@/features/clients/api";
 import { getLeadById } from "@/features/leads/api";
 import { getProjectsByClientId } from "@/features/projects/api";
+import { getServices } from "@/features/services/api";
 import { createClient } from "@/lib/supabase/server";
 import { notFound } from "next/navigation";
 
@@ -22,14 +23,20 @@ export default async function ClientDetailPage({
   const client = await getClientById(supabase, id);
   if (!client) notFound();
 
-  const [relatedLead, projects] = await Promise.all([
+  const [relatedLead, projects, services] = await Promise.all([
     client.lead_id ? getLeadById(supabase, client.lead_id) : Promise.resolve(null),
     getProjectsByClientId(supabase, client.id),
+    getServices(supabase, false),
   ]);
 
   return (
     <DashboardShell pageTitle={client.full_name}>
-      <ClientDetailView client={client} relatedLead={relatedLead} projects={projects} />
+      <ClientDetailView
+        client={client}
+        relatedLead={relatedLead}
+        projects={projects}
+        services={services}
+      />
     </DashboardShell>
   );
 }

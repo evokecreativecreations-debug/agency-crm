@@ -9,6 +9,7 @@ import { createProject } from "@/features/projects/api";
 import { createClient } from "@/lib/supabase/client";
 import type { Client } from "@/types/client";
 import type { Project } from "@/types/project";
+import type { Service } from "@/types/service";
 import { useState, type FormEvent } from "react";
 
 interface NewProjectDialogProps {
@@ -17,6 +18,7 @@ interface NewProjectDialogProps {
   onCreated: (project: Project) => void;
   /** Clients available to pick from. */
   clients: Client[];
+  services: Service[];
   /**
    * When set, the client field is locked to this client instead of showing
    * a picker — used when creating a project from a Client's detail page
@@ -38,11 +40,13 @@ export function NewProjectDialog({
   onClose,
   onCreated,
   clients,
+  services,
   lockedClientId,
 }: NewProjectDialogProps) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [clientId, setClientId] = useState(lockedClientId ?? "");
+  const [serviceId, setServiceId] = useState("");
   const [startDate, setStartDate] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -56,6 +60,7 @@ export function NewProjectDialog({
     setTitle("");
     setDescription("");
     setClientId(lockedClientId ?? "");
+    setServiceId("");
     setStartDate("");
     setDueDate("");
     setError(null);
@@ -75,6 +80,7 @@ export function NewProjectDialog({
       const supabase = createClient();
       const project = await createProject(supabase, {
         client_id: clientId,
+        service_id: serviceId || undefined,
         title,
         description: description || undefined,
         start_date: startDate || undefined,
@@ -126,6 +132,10 @@ export function NewProjectDialog({
             ))}
           </Select>
         )}
+        <Select label="Service (optional)" value={serviceId} onChange={(e) => setServiceId(e.target.value)} helperText="Choose a catalog service for this project.">
+          <option value="">No service selected</option>
+          {services.filter((service) => service.is_active).map((service) => <option key={service.id} value={service.id}>{service.name}</option>)}
+        </Select>
         <Input
           label="Project title"
           required

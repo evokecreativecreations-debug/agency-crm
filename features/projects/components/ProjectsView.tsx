@@ -19,6 +19,7 @@ import { updateProjectStatus } from "@/features/projects/api";
 import { createClient } from "@/lib/supabase/client";
 import type { Client } from "@/types/client";
 import type { Project, ProjectStatus } from "@/types/project";
+import type { Service } from "@/types/service";
 import { FolderKanban, Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -27,6 +28,7 @@ import { useMemo, useState } from "react";
 interface ProjectsViewProps {
   initialProjects: Project[];
   clients: Client[];
+  services: Service[];
 }
 
 export const PROJECT_STATUS_LABEL: Record<ProjectStatus, string> = {
@@ -67,7 +69,7 @@ function formatDate(iso: string | null) {
  * pattern as LeadsView), plus the "New Project" action wired to a client
  * picker (NewProjectDialog).
  */
-export function ProjectsView({ initialProjects, clients }: ProjectsViewProps) {
+export function ProjectsView({ initialProjects, clients, services }: ProjectsViewProps) {
   const router = useRouter();
   const [projects, setProjects] = useState(initialProjects);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -177,6 +179,7 @@ export function ProjectsView({ initialProjects, clients }: ProjectsViewProps) {
         onClose={() => setDialogOpen(false)}
         onCreated={handleCreated}
         clients={clients}
+        services={services}
       />
     </>
   );

@@ -5,12 +5,14 @@ import { ClientProjectsCard } from "@/features/projects/components/ClientProject
 import type { Client } from "@/types/client";
 import type { Lead } from "@/types/lead";
 import type { Project } from "@/types/project";
+import type { Service } from "@/types/service";
 import { Building2, Calendar, Mail, Phone, StickyNote, Users } from "lucide-react";
 
 interface ClientDetailViewProps {
   client: Client;
   relatedLead: Lead | null;
   projects: Project[];
+  services: Service[];
 }
 
 function formatDate(iso: string) {
@@ -34,7 +36,7 @@ const LEAD_STATUS_LABEL: Record<Lead["status"], string> = {
  * frozen schema), so this stays a plain server-renderable component —
  * no "use client" directive.
  */
-export function ClientDetailView({ client, relatedLead, projects }: ClientDetailViewProps) {
+export function ClientDetailView({ client, relatedLead, projects, services }: ClientDetailViewProps) {
   return (
     <div className="space-y-6">
       <div>
@@ -92,7 +94,7 @@ export function ClientDetailView({ client, relatedLead, projects }: ClientDetail
         </Card>
       </div>
 
-      <ClientProjectsCard client={client} initialProjects={projects} />
+      <ClientProjectsCard client={client} initialProjects={projects} services={services} />
 
       <Card>
         <CardHeader>

@@ -55,6 +55,7 @@ export async function createProject(
     .from("projects")
     .insert({
       client_id: input.client_id,
+      service_id: input.service_id || null,
       title: input.title,
       description: input.description || null,
       start_date: input.start_date || null,

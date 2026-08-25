@@ -10,6 +10,7 @@ export type ProjectStatus =
 export interface Project {
   id: string;
   client_id: string;
+  service_id: string | null;
   title: string;
   description: string | null;
   status: ProjectStatus;
@@ -24,6 +25,7 @@ export interface Project {
  */
 export interface NewProjectInput {
   client_id: string;
+  service_id?: string;
   title: string;
   description?: string;
   start_date?: string;
@@ -36,6 +38,6 @@ export interface NewProjectInput {
 export type ProjectUpdateInput = Partial<
   Pick<
     Project,
-    "title" | "description" | "status" | "start_date" | "due_date"
+    "service_id" | "title" | "description" | "status" | "start_date" | "due_date"
   >
 >;

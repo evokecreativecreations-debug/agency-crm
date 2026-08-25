@@ -10,6 +10,7 @@ import {
 import { NewProjectDialog } from "@/features/projects/components/NewProjectDialog";
 import type { Client } from "@/types/client";
 import type { Project } from "@/types/project";
+import type { Service } from "@/types/service";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -18,6 +19,7 @@ import { useState } from "react";
 interface ClientProjectsCardProps {
   client: Client;
   initialProjects: Project[];
+  services: Service[];
 }
 
 /**
@@ -28,7 +30,7 @@ interface ClientProjectsCardProps {
  * own small "use client" component rather than converting the whole
  * ClientDetailView.
  */
-export function ClientProjectsCard({ client, initialProjects }: ClientProjectsCardProps) {
+export function ClientProjectsCard({ client, initialProjects, services }: ClientProjectsCardProps) {
   const router = useRouter();
   const [projects, setProjects] = useState(initialProjects);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -73,6 +75,7 @@ export function ClientProjectsCard({ client, initialProjects }: ClientProjectsCa
         onClose={() => setDialogOpen(false)}
         onCreated={handleCreated}
         clients={[client]}
+        services={services}
         lockedClientId={client.id}
       />
     </Card>
