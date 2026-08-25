@@ -176,8 +176,15 @@ Phase 11 — Services Catalog 🔄
 - ⬜ **Rameez runs the migration on the real Supabase project** (`supabase/migrations/20260822090000_create_services_table.sql`)
 - ⬜ **Rameez approves Phase 11**
 
-## Phase 12 — Activity Log ⬜
-- ⬜ Core logging system (foundation for Notifications, Messages, Timeline)
+## Phase 12 — Activity Log ✅
+- ✅ SQL migration: append-only `activity_logs` table with authenticated-only read access
+- ✅ Composite index on `entity_type`, `entity_id`, and `created_at` for fast future timeline/feed queries
+- ✅ Database triggers automatically record create, update, status-change, and payment events across CRM modules
+- ✅ `types/activity-log.ts` — shared activity-log types
+- ✅ `features/activity-log/api.ts` — read-only helpers for general and entity-specific activity history
+- ✅ Foundation ready for future Notifications, Messages, Dashboard Recent Activity, and Client Activity Timeline
+- ✅ Verified locally: `npm run lint`, `npx tsc --noEmit`, and `npm run build`
+- ✅ Rameez tested and approved Phase 12
 
 ## Phase 13 — Notifications ⬜
 - ⬜ Notification center + bell icon
