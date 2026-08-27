@@ -2,7 +2,7 @@
 
 import { Breadcrumbs } from "@/components/ui/Breadcrumbs";
 import { SearchBar } from "@/components/ui/SearchBar";
-import { NotificationButton } from "@/components/layout/NotificationButton";
+import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { UserMenu } from "@/components/layout/UserMenu";
 import { Menu } from "lucide-react";
 
@@ -38,7 +38,7 @@ export function TopNav({ onMenuClick, pageTitle, unreadCount = 0 }: TopNavProps)
         </div>
 
         <div className="flex shrink-0 items-center gap-1">
-          <NotificationButton unreadCount={unreadCount} />
+          <NotificationBell />
           <UserMenu />
         </div>
       </div>

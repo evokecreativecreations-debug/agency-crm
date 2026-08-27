@@ -111,7 +111,12 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 ---
 
 ---
-## 8. Current Phase
+8. Current Phase
 
-**Phase 10 — Payments** (complete, pending review)
-Eighth database table (`payments`) is live — the first module with a delete policy (correcting a mis-entered payment is a real need, unlike the intentionally-unsupported deletion elsewhere). Every invoice can now have multiple payments; the invoice's status (draft/sent/partially_paid/paid) recalculates automatically after every payment change, reusing the Phase 9 invoice API rather than duplicating that logic. Payments are managed from a "Payments" button per invoice row on `/projects/[id]` and `/invoices`, opening a wider modal (`Dialog` gained an optional `size` prop, defaulting to the original width for every existing dialog) with totals, history, and add/edit/delete. The top-level `/payments` route (already linked from the sidebar) was initially missed and has since been added, using a small `PaymentsCardStandalone` client wrapper — required because Server Components can't pass function props directly to Client Components.
+Phase 14 — Messages (complete, approved)
+
+Gmail message synchronization and conversation history are now implemented. The CRM can fetch Gmail messages, group them into conversations using Gmail thread IDs, prevent duplicate message imports, and display inbound/outbound message history in the /messages interface. Message body extraction supports both plain-text and HTML MIME content, including nested MIME parts, with graceful handling for messages without usable text content.
+
+Reply sending is also implemented through Resend. Users can compose and send replies from an existing conversation, with sent messages saved into the CRM's messages table and linked to the corresponding Gmail conversation/thread. Conversation search, conversation selection, message loading, responsive layout, and the Messages sidebar active-state behavior have all been implemented and manually verified.
+
+Phase 14 status: ✅ Complete and verified by Rameez.

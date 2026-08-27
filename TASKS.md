@@ -186,11 +186,60 @@ Phase 11 — Services Catalog 🔄
 - ✅ Verified locally: `npm run lint`, `npx tsc --noEmit`, and `npm run build`
 - ✅ Rameez tested and approved Phase 12
 
-## Phase 13 — Notifications ⬜
-- ⬜ Notification center + bell icon
+## Phase 13 — Notifications ✅- 
+✅ SQL migration: `notifications` table with authenticated-user access policies- 
+✅ `types/notification.ts` — shared notification types- 
+✅ `features/notifications/api.ts` — notification fetch, unread count, mark-as-read, and mark-all-as-read helpers- 
+✅ `NotificationBell` — dashboard notification bell with unread count badge and dropdown notification list- 
+✅ Individual notifications can be marked as read and linked notifications navigate to their target page- 
+✅ **Mark all read** functionality implemented- 
+✅ `NotificationCenter` — full notifications page with unread state and notification management- 
+✅ **View all notifications** navigation integrated into the dashboard notification dropdown- 
+✅ Notifications page integrated with the existing `DashboardShell`, Sidebar, and TopNav layout- 
+✅ Notification dropdown overlay and z-index styling polished for a clean foreground panel- 
+✅ Verified Supabase migration successfully pushed to the remote database- 
+✅ Verified locally: `npm run lint` and `npx tsc --noEmit`- 
+✅ Rameez tested and approved Phase 13
 
-## Phase 14 — Messages ⬜
-- ⬜ Conversation history + reply sending (needs email provider)
+Phase 14 — Messages ✅
+
+✅ Gmail message sync implemented via /api/gmail/sync
+
+✅ Gmail conversations are grouped using gmail_thread_id
+
+✅ Existing Gmail messages are detected and skipped safely to prevent duplicates
+
+✅ Conversation history displayed in /messages
+
+✅ Message details displayed with sender, recipient, subject, body, and timestamp
+
+✅ Inbound/outbound message direction handled
+
+✅ Gmail message body extraction supports text/plain and text/html, including nested MIME parts
+
+✅ Empty/invalid message content handled gracefully
+
+✅ Conversation search implemented
+
+✅ Conversation selection and message history loading implemented
+
+✅ Reply composer implemented
+
+✅ Reply sending implemented through Resend
+
+✅ Sent replies are saved back into the messages table
+
+✅ Sent messages are linked to the existing Gmail conversation/thread
+
+✅ Messages UI/sidebar active-state issue fixed
+
+✅ Responsive Messages interface verified
+
+✅ Verified manually in the browser
+
+✅ Verified Gmail sync endpoint returns successfully
+
+✅ Rameez tested and confirmed Phase 14 is working smoothly
 
 ## Phase 15 — File Management ⬜
 - ⬜ Upload/attach/view files
