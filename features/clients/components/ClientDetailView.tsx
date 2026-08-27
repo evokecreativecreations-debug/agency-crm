@@ -7,12 +7,15 @@ import type { Lead } from "@/types/lead";
 import type { Project } from "@/types/project";
 import type { Service } from "@/types/service";
 import { Building2, Calendar, Mail, Phone, StickyNote, Users } from "lucide-react";
+import { ActivityTimeline } from "@/features/activity-log/components/ActivityTimeline";
+import type { ActivityLog } from "@/types/activity-log";
 
 interface ClientDetailViewProps {
   client: Client;
   relatedLead: Lead | null;
   projects: Project[];
   services: Service[];
+  activities: ActivityLog[];
 }
 
 function formatDate(iso: string) {
@@ -36,7 +39,13 @@ const LEAD_STATUS_LABEL: Record<Lead["status"], string> = {
  * frozen schema), so this stays a plain server-renderable component —
  * no "use client" directive.
  */
-export function ClientDetailView({ client, relatedLead, projects, services }: ClientDetailViewProps) {
+export function ClientDetailView({
+  client,
+  relatedLead,
+  projects,
+  services,
+  activities,
+}: ClientDetailViewProps) {
   return (
     <div className="space-y-6">
       <div>
@@ -94,7 +103,29 @@ export function ClientDetailView({ client, relatedLead, projects, services }: Cl
         </Card>
       </div>
 
-      <ClientProjectsCard client={client} initialProjects={projects} services={services} />
+      <ClientProjectsCard
+  client={client}
+  initialProjects={projects}
+  services={services}
+/>
+
+<Card>
+  <CardHeader>
+    <CardTitle className="flex items-center gap-2">
+      <StickyNote className="h-4 w-4" aria-hidden="true" /> Notes
+    </CardTitle>
+  </CardHeader>
+
+  <CardContent>
+    {client.notes ? (
+      <Body className="whitespace-pre-wrap">{client.notes}</Body>
+    ) : (
+      <Body className="text-slate">No notes yet.</Body>
+    )}
+  </CardContent>
+</Card>
+
+<ActivityTimeline activities={activities} />
 
       <Card>
         <CardHeader>
