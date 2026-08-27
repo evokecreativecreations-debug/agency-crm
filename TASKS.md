@@ -321,8 +321,47 @@ Phase 16 — Dashboard Analytics & Quick Actions ✅
 ✅ Dashboard manually verified in browser
 ✅ Rameez tested and confirmed Phase 16 is working smoothly
 
-## Phase 17 — Client Activity Timeline ⬜
-- ⬜ Timeline view on client detail page
+# Agency CRM — Tasks
+
+## Phase 17 — Client Activity Timeline
+
+### Status: COMPLETE
+
+- [x] Add activity log API helper for entity-specific activity
+- [x] Add `ActivityTimeline` component
+- [x] Load client activity logs on client detail page
+- [x] Filter activity logs by `entity_type = client`
+- [x] Filter activity logs by client ID
+- [x] Display activity history chronologically
+- [x] Integrate timeline into `/clients/[id]`
+- [x] Preserve existing client contact details
+- [x] Preserve related lead section
+- [x] Preserve client projects section
+- [x] Preserve client notes section
+- [x] Verify TypeScript
+- [x] Verify ESLint
+- [x] Verify production build
+- [x] Verify dashboard/client detail page in browser
+- [x] Commit changes to Git
+- [x] Push changes to GitHub
+
+### Files Added
+
+- `features/activity-log/components/ActivityTimeline.tsx`
+
+### Files Updated
+
+- `app/(dashboard)/clients/[id]/page.tsx`
+- `features/clients/components/ClientDetailView.tsx`
+
+### Validation
+
+```text
+npx tsc --noEmit  → PASS
+npm run lint      → PASS
+npm run build     → PASS
+Browser QA        → PASS
+Git push          → PASS
 
 ## Phase 18 — Dashboard Polish ⬜
 - ⬜ Final widgets, recent activity, deadlines

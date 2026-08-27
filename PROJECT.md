@@ -145,13 +145,31 @@ authenticated landing page with useful CRM analytics and shortcut actions.
 - Dashboard manually tested in the browser
 - Rameez confirmed Phase 16 is working smoothly
 
-### Phase 16 Status
+### Current Phase
 
-**Complete ✅**
+## Phase 17 — Client Activity Timeline
 
-The dashboard now provides a functional CRM overview with analytics,
-key business statistics, and quick navigation actions.
+**Status: COMPLETE**
 
-### Next Phase
+The Client Activity Timeline has been implemented on the client detail page.
 
-**Phase 17 — Dashboard Activity & Operational Overview ⬜**
+### Implementation
+
+The client detail page now loads activity records from the shared `activity_logs` table and displays activities associated with the selected client.
+
+The implementation uses:
+
+- `features/activity-log/api.ts`
+- `features/activity-log/components/ActivityTimeline.tsx`
+- `types/activity-log.ts`
+- `app/(dashboard)/clients/[id]/page.tsx`
+- `features/clients/components/ClientDetailView.tsx`
+
+The activity log remains append-only and is generated through PostgreSQL triggers. The client timeline reads the existing activity log rather than introducing a duplicate history system.
+
+### Client Detail Page
+
+Route:
+
+```text
+/clients/[id]
