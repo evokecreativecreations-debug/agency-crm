@@ -9,7 +9,6 @@ import { Menu } from "lucide-react";
 interface TopNavProps {
   onMenuClick?: () => void;
   pageTitle?: string;
-  /** Unread notification count. 0 or undefined = no badge dot shown. */
   unreadCount?: number;
 }
 
@@ -18,18 +17,26 @@ interface TopNavProps {
  * Row 1: hamburger (mobile) + breadcrumbs, search, notifications, account.
  * Row 2: page title (only rendered when pageTitle is provided).
  */
-export function TopNav({ onMenuClick, pageTitle, unreadCount = 0 }: TopNavProps) {
+export function TopNav({
+  onMenuClick,
+  pageTitle,
+  unreadCount = 0,
+}: TopNavProps) {
+  void unreadCount;
+
   return (
     <header className="flex shrink-0 flex-col border-b border-line bg-surface">
       <div className="flex h-14 items-center justify-between gap-3 px-4 md:px-6">
         <div className="flex min-w-0 items-center gap-3">
           <button
+            type="button"
             onClick={onMenuClick}
             className="rounded-[var(--radius-sm)] p-1.5 text-slate hover:bg-paper hover:text-ink md:hidden"
             aria-label="Open menu"
           >
             <Menu className="h-5 w-5" />
           </button>
+
           <Breadcrumbs />
         </div>
 
@@ -45,7 +52,9 @@ export function TopNav({ onMenuClick, pageTitle, unreadCount = 0 }: TopNavProps)
 
       {pageTitle && (
         <div className="px-4 pb-3 md:px-6">
-          <h1 className="text-sm font-semibold text-ink">{pageTitle}</h1>
+          <h1 className="text-sm font-semibold text-ink">
+            {pageTitle}
+          </h1>
         </div>
       )}
     </header>

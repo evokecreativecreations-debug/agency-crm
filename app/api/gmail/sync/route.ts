@@ -96,8 +96,8 @@ function extractBody(
   text: string;
   html: string | null;
 } {
-  let textParts: string[] = [];
-  let htmlParts: string[] = [];
+  const textParts: string[] = [];
+  const htmlParts: string[] = [];
 
   function walk(part: GmailPart | null | undefined) {
     if (!part) return;

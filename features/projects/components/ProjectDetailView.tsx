@@ -6,6 +6,7 @@ import {
   PROJECT_STATUS_BADGE_VARIANT,
   PROJECT_STATUS_LABEL,
 } from "@/features/projects/components/ProjectsView";
+import { ProjectFilesCard } from "@/features/files/components/ProjectFilesCard";
 import { ProjectRevisionsCard } from "@/features/revisions/components/ProjectRevisionsCard";
 import { ProjectTasksCard } from "@/features/tasks/components/ProjectTasksCard";
 import type { Client } from "@/types/client";
@@ -26,6 +27,7 @@ interface ProjectDetailViewProps {
 
 function formatDate(iso: string | null) {
   if (!iso) return null;
+
   return new Date(iso).toLocaleDateString(undefined, {
     month: "long",
     day: "numeric",
@@ -53,8 +55,10 @@ export function ProjectDetailView({
     <div className="space-y-6">
       <div>
         <Eyebrow>Project</Eyebrow>
+
         <div className="mt-1 flex flex-wrap items-center gap-3">
           <H1>{project.title}</H1>
+
           <Badge variant={PROJECT_STATUS_BADGE_VARIANT[project.status]}>
             {PROJECT_STATUS_LABEL[project.status]}
           </Badge>
@@ -66,16 +70,23 @@ export function ProjectDetailView({
           <CardHeader>
             <CardTitle>Client</CardTitle>
           </CardHeader>
+
           <CardContent>
             {client ? (
               <div className="flex items-center gap-2.5">
-                <Building2 className="h-4 w-4 text-slate" aria-hidden="true" />
+                <Building2
+                  className="h-4 w-4 text-slate"
+                  aria-hidden="true"
+                />
+
                 <Link
                   href={`/clients/${client.id}`}
                   className="text-ink transition-colors hover:text-signal hover:underline"
                 >
                   {client.full_name}
-                  {client.company_name ? ` — ${client.company_name}` : ""}
+                  {client.company_name
+                    ? ` — ${client.company_name}`
+                    : ""}
                 </Link>
               </div>
             ) : (
@@ -88,36 +99,70 @@ export function ProjectDetailView({
           <CardHeader>
             <CardTitle>Timeline</CardTitle>
           </CardHeader>
+
           <CardContent className="space-y-3">
             <div className="flex items-center gap-2.5">
-              <Calendar className="h-4 w-4 text-slate" aria-hidden="true" />
-              <Body>Started {startDate ?? <Caption>Not set</Caption>}</Body>
+              <Calendar
+                className="h-4 w-4 text-slate"
+                aria-hidden="true"
+              />
+
+              <Body>
+                Started {startDate ?? <Caption>Not set</Caption>}
+              </Body>
             </div>
+
             <div className="flex items-center gap-2.5">
-              <CalendarClock className="h-4 w-4 text-slate" aria-hidden="true" />
-              <Body>Due {dueDate ?? <Caption>Not set</Caption>}</Body>
+              <CalendarClock
+                className="h-4 w-4 text-slate"
+                aria-hidden="true"
+              />
+
+              <Body>
+                Due {dueDate ?? <Caption>Not set</Caption>}
+              </Body>
             </div>
           </CardContent>
         </Card>
       </div>
 
-      <ProjectTasksCard projectId={project.id} initialTasks={tasks} />
+      <ProjectTasksCard
+        projectId={project.id}
+        initialTasks={tasks}
+      />
 
-      <ProjectRevisionsCard projectId={project.id} initialRevisions={revisions} />
+      <ProjectRevisionsCard
+        projectId={project.id}
+        initialRevisions={revisions}
+      />
 
-      <InvoicesCard projectId={project.id} initialInvoices={invoices} />
+      <InvoicesCard
+        projectId={project.id}
+        initialInvoices={invoices}
+      />
+
+      <ProjectFilesCard projectId={project.id} />
 
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <FileText className="h-4 w-4" aria-hidden="true" /> Description
+            <FileText
+              className="h-4 w-4"
+              aria-hidden="true"
+            />
+            Description
           </CardTitle>
         </CardHeader>
+
         <CardContent>
           {project.description ? (
-            <Body className="whitespace-pre-wrap">{project.description}</Body>
+            <Body className="whitespace-pre-wrap">
+              {project.description}
+            </Body>
           ) : (
-            <Body className="text-slate">No description yet.</Body>
+            <Body className="text-slate">
+              No description yet.
+            </Body>
           )}
         </CardContent>
       </Card>

@@ -64,17 +64,24 @@ export function MessagesView() {
   );
 
   useEffect(() => {
+  const timer = window.setTimeout(() => {
     void loadConversations();
-  }, [loadConversations]);
+  }, 0);
+
+  return () => window.clearTimeout(timer);
+}, [loadConversations]);
 
   useEffect(() => {
-    if (!selectedConversationId) {
-      setMessages([]);
-      return;
-    }
+  if (!selectedConversationId) {
+    return;
+  }
 
+  const timer = window.setTimeout(() => {
     void loadMessages(selectedConversationId);
-  }, [selectedConversationId, loadMessages]);
+  }, 0);
+
+  return () => window.clearTimeout(timer);
+}, [selectedConversationId, loadMessages]);
 
   const filteredConversations = useMemo(() => {
     const query = search.trim().toLowerCase();

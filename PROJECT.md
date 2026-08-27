@@ -111,12 +111,30 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 ---
 
 ---
-8. Current Phase
+## Current Development Phase
 
-Phase 14 — Messages (complete, approved)
+### Phase 15 — File Management ✅
 
-Gmail message synchronization and conversation history are now implemented. The CRM can fetch Gmail messages, group them into conversations using Gmail thread IDs, prevent duplicate message imports, and display inbound/outbound message history in the /messages interface. Message body extraction supports both plain-text and HTML MIME content, including nested MIME parts, with graceful handling for messages without usable text content.
+Status: COMPLETE
 
-Reply sending is also implemented through Resend. Users can compose and send replies from an existing conversation, with sent messages saved into the CRM's messages table and linked to the corresponding Gmail conversation/thread. Conversation search, conversation selection, message loading, responsive layout, and the Messages sidebar active-state behavior have all been implemented and manually verified.
+The CRM now supports project-level file management.
 
-Phase 14 status: ✅ Complete and verified by Rameez.
+Completed:
+- Project file database storage
+- Supabase Storage integration
+- File upload
+- File listing
+- Signed URL downloads
+- File deletion
+- Authentication checks
+- Row Level Security
+- Project detail integration
+- Upload/download/delete browser verification
+- TypeScript validation
+- Production build validation
+
+Validation:
+- `npm run lint` ✅
+- `npx tsc --noEmit` ✅
+- `npm run build` ✅
+- Manual browser testing ✅

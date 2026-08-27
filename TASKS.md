@@ -241,8 +241,71 @@ Phase 14 — Messages ✅
 
 ✅ Rameez tested and confirmed Phase 14 is working smoothly
 
-## Phase 15 — File Management ⬜
-- ⬜ Upload/attach/view files
+## Phase 15 — File Management ✅
+
+✅ Project file management implemented
+
+✅ `project_files` database table created in Supabase
+
+✅ Project files linked to projects using `project_id`
+
+✅ Supabase Storage `project-files` bucket integrated
+
+✅ File upload implemented from project detail page
+
+✅ Uploaded files stored in Supabase Storage
+
+✅ File metadata saved in `project_files`
+
+✅ Original filename preserved in database
+
+✅ MIME type and file size stored
+
+✅ Uploading state and loading state handled
+
+✅ Authentication checked before file upload
+
+✅ File download implemented using signed Supabase Storage URLs
+
+✅ File deletion implemented
+
+✅ File removed from Supabase Storage on deletion
+
+✅ File database record removed on deletion
+
+✅ Failed database insert safely cleans up uploaded storage file
+
+✅ File list displayed inside project detail page
+
+✅ Empty file state implemented
+
+✅ File size formatting implemented
+
+✅ File date formatting implemented
+
+✅ Upload/download/delete actions verified
+
+✅ Project Files section integrated into `ProjectDetailView`
+
+✅ `/api/files` POST endpoint implemented
+
+✅ `/api/files/[id]` DELETE endpoint implemented
+
+✅ Row Level Security enabled for `project_files`
+
+✅ Authenticated-user RLS policies implemented
+
+✅ TypeScript validation passed
+
+✅ Production build passed
+
+✅ File upload tested manually in the browser
+
+✅ File download tested manually in the browser
+
+✅ File deletion tested manually in the browser
+
+✅ Rameez tested and confirmed Phase 15 is working smoothly
 
 ## Phase 16 — Dashboard Analytics & Quick Actions ⬜
 - ⬜ Revenue/conversion widgets + shortcut buttons

@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface SidebarProps {
   mobileOpen?: boolean;
@@ -24,17 +24,17 @@ export function Sidebar({
 }: SidebarProps) {
   const pathname = usePathname();
 
-  const [collapsed, setCollapsed] = useState(false);
+  const [collapsed, setCollapsed] = useState(() => {
+  if (typeof window === "undefined") {
+    return false;
+  }
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(
-      COLLAPSE_STORAGE_KEY
-    );
+  return (
+    window.localStorage.getItem(COLLAPSE_STORAGE_KEY) === "true"
+  );
+});
 
-    if (stored === "true") {
-      setCollapsed(true);
-    }
-  }, []);
+ 
 
   function toggleCollapsed() {
     setCollapsed((current) => {
