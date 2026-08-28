@@ -113,63 +113,34 @@ Every feature ships with a "Future Improvements (Not Built Yet)" TODO list — n
 ---
 ## Current Development Phase
 
-## Phase 16 — Dashboard Analytics & Quick Actions ✅
-
-Phase 16 completes the main Dashboard experience by replacing the minimal
-authenticated landing page with useful CRM analytics and shortcut actions.
-
-### Completed
-
-- Dashboard analytics and statistics implemented
-- Revenue statistics displayed
-- Lead/conversion statistics displayed
-- Dashboard stats cards implemented
-- Quick Actions implemented
-- Quick Actions provide direct navigation to:
-  - Inquiries
-  - Leads
-  - Projects
-  - Invoices
-- Dashboard components separated into:
-  - `features/dashboard/components/DashboardStats.tsx`
-  - `features/dashboard/components/DashboardAnalytics.tsx`
-  - `features/dashboard/components/QuickActions.tsx`
-- Existing authentication flow preserved
-- Dashboard remains protected through the existing dashboard shell/auth flow
-- Responsive dashboard layout verified
-- Unsupported `asChild` Button prop issue fixed
-- ESLint verified with no errors
-- TypeScript compilation verified successfully
-- Production build verified successfully
-- `/dashboard` route confirmed in the production build
-- Dashboard manually tested in the browser
-- Rameez confirmed Phase 16 is working smoothly
-
 ### Current Phase
 
-## Phase 17 — Client Activity Timeline
+## Phase 18 — Dashboard Polish
 
 **Status: COMPLETE**
 
-The Client Activity Timeline has been implemented on the client detail page.
+Dashboard analytics and Quick Actions have been polished and expanded.
 
 ### Implementation
 
-The client detail page now loads activity records from the shared `activity_logs` table and displays activities associated with the selected client.
+- Business Overview dashboard metrics implemented
+- Lead conversion metrics displayed
+- Project progress metrics displayed
+- Task completion metrics displayed
+- Outstanding revenue displayed
+- Total invoiced and total paid displayed
+- Dashboard Quick Actions polished
+- Existing design-system components reused
+- Responsive dashboard layout preserved
+- ESLint, TypeScript, and production build verified
 
-The implementation uses:
+## Phase 19 — Full PWA Testing
 
-- `features/activity-log/api.ts`
-- `features/activity-log/components/ActivityTimeline.tsx`
-- `types/activity-log.ts`
-- `app/(dashboard)/clients/[id]/page.tsx`
-- `features/clients/components/ClientDetailView.tsx`
+**Status: NOT STARTED**
 
-The activity log remains append-only and is generated through PostgreSQL triggers. The client timeline reads the existing activity log rather than introducing a duplicate history system.
+The next phase is a final PWA and responsive QA pass across the CRM.
 
-### Client Detail Page
+### Planned
 
-Route:
-
-```text
-/clients/[id]
+- iPhone PWA installation test
+- Responsive QA across all CRM modules

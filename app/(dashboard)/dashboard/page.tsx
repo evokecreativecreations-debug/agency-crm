@@ -15,18 +15,22 @@ export default async function DashboardPage() {
     <DashboardShell pageTitle="Dashboard">
       <div className="space-y-8">
         <PageHeader
-          eyebrow="Overview"
+          eyebrow="Agency CRM"
           title="Dashboard"
-          description="A quick overview of your agency's pipeline and revenue."
+          description="Monitor sales, projects and revenue from one place."
         />
 
         <DashboardAnalytics analytics={analytics} />
 
         <QuickActions />
 
-        <BodySm>
-          Analytics are calculated from the current CRM records.
-        </BodySm>
+        <div className="rounded-[var(--radius-lg)] border border-line bg-paper px-5 py-4">
+          <BodySm>
+            Dashboard metrics are calculated live from Leads, Projects,
+            Tasks, Invoices and Payments. Refresh the page after making
+            changes to see updated totals.
+          </BodySm>
+        </div>
       </div>
     </DashboardShell>
   );
