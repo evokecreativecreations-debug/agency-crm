@@ -1,36 +1,28 @@
 @import "tailwindcss";
 
 /*
-  ============================================================
-  DESIGN TOKENS — Phase 0.5 Design System Foundation
-  ============================================================
-  Every value here is documented in DESIGN_SYSTEM.md. Don't
-  hardcode a color/spacing/radius value in a component — use
-  these tokens (via Tailwind classes below) so the whole app
-  stays visually consistent and easy to re-theme later.
-*/
+ * ============================================================
+ * DESIGN TOKENS — Agency CRM
+ * ============================================================
+ */
 
 :root {
-  /* --- Neutrals (warm paper, not stark white/black) --- */
-  --color-paper: #fafaf8;      /* page background */
-  --color-surface: #ffffff;    /* cards, panels, inputs */
-  --color-line: #e6e4e0;       /* borders, dividers */
+  --color-paper: #fafaf8;
+  --color-surface: #ffffff;
+  --color-line: #e6e4e0;
   --color-line-strong: #d4d1cb;
 
-  --color-ink: #17171a;        /* primary text */
-  --color-slate: #6b6b72;      /* secondary text */
-  --color-muted: #a3a2a8;      /* placeholder/disabled text */
+  --color-ink: #17171a;
+  --color-slate: #6b6b72;
+  --color-muted: #a3a2a8;
 
-  /* --- Brand (signal) --- */
-  --color-signal: #0e6b5c;        /* primary actions, active nav, focus ring */
+  --color-signal: #0e6b5c;
   --color-signal-hover: #0b5648;
-  --color-signal-soft: #e3f1ee;   /* tinted backgrounds for signal */
+  --color-signal-soft: #e3f1ee;
 
-  /* --- Secondary accent (used sparingly) --- */
   --color-amber: #c2760c;
   --color-amber-soft: #fbf0dd;
 
-  /* --- Semantic status colors --- */
   --color-success: #1c8a5e;
   --color-success-soft: #e5f4ed;
   --color-warning: #c2760c;
@@ -40,10 +32,6 @@
   --color-info: #2a63c4;
   --color-info-soft: #e9f0fc;
 
-  /* --- Pipeline stage colors (signature motif — see DESIGN_SYSTEM.md) ---
-     Every stage of Inquiry → Lead → Client → Project → Invoice → Paid
-     gets one fixed color used consistently in dots, badges, and
-     sidebar indicators, so status is recognizable at a glance. */
   --color-stage-inquiry: #6b6b72;
   --color-stage-lead: #2a63c4;
   --color-stage-client: #0e6b5c;
@@ -51,15 +39,56 @@
   --color-stage-invoice: #c2760c;
   --color-stage-paid: #1c8a5e;
 
-  /* --- Radius scale --- */
-  --radius-sm: 6px;   /* badges, small inputs */
-  --radius-md: 10px;  /* buttons, inputs */
-  --radius-lg: 14px;  /* cards, panels */
-  --radius-xl: 20px;  /* dialogs, large surfaces */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
 
-  /* --- Shadow (one subtle token, used sparingly) --- */
-  --shadow-soft: 0 1px 2px rgba(23, 23, 26, 0.04), 0 4px 12px rgba(23, 23, 26, 0.05);
+  --shadow-soft:
+    0 1px 2px rgba(23, 23, 26, 0.04),
+    0 4px 12px rgba(23, 23, 26, 0.05);
+
   --shadow-dialog: 0 12px 32px rgba(23, 23, 26, 0.16);
+}
+
+html.dark {
+  --color-paper: #111214;
+  --color-surface: #191a1d;
+  --color-line: #2c2e33;
+  --color-line-strong: #3b3e45;
+
+  --color-ink: #f2f2f0;
+  --color-slate: #a6a6ad;
+  --color-muted: #74757c;
+
+  --color-signal: #35a894;
+  --color-signal-hover: #2c8d7c;
+  --color-signal-soft: #173b35;
+
+  --color-amber: #e09a3b;
+  --color-amber-soft: #3b2d19;
+
+  --color-success: #45b77f;
+  --color-success-soft: #17382b;
+  --color-warning: #e09a3b;
+  --color-warning-soft: #3b2d19;
+  --color-danger: #ed6970;
+  --color-danger-soft: #3b1f22;
+  --color-info: #6e9be5;
+  --color-info-soft: #1d2b43;
+
+  --color-stage-inquiry: #a6a6ad;
+  --color-stage-lead: #6e9be5;
+  --color-stage-client: #35a894;
+  --color-stage-project: #a17ce0;
+  --color-stage-invoice: #e09a3b;
+  --color-stage-paid: #45b77f;
+
+  --shadow-soft:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.18);
+
+  --shadow-dialog: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 @theme inline {
@@ -99,9 +128,20 @@
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
 
-  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-sans:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --font-mono:
+    ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html {
+  background: var(--color-paper);
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
 }
 
 body {
@@ -109,9 +149,18 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
-/* Consistent, visible keyboard focus ring across every interactive element */
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
 :focus-visible {
   outline: 2px solid var(--color-signal);
   outline-offset: 2px;
@@ -119,7 +168,9 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

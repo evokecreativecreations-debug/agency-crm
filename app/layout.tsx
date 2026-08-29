@@ -3,17 +3,12 @@ import Script from "next/script";
 
 import "./globals.css";
 import { AuthProvider } from "@/features/auth/AuthContext";
-
-// Note: we're using the system font stack (defined in globals.css) instead
-// of a Google Font. This keeps the app fast and avoids any dependency on
-// an external font service just to load the page.
+import { ThemeProvider } from "@/components/layout/ThemeProvider";
 
 export const metadata: Metadata = {
   title: "Agency CRM",
   description: "Internal CRM — inquiries to invoices, in one place.",
   appleWebApp: {
-    // This is what makes "Add to Home Screen" behave like a real app
-    // on iPhone instead of just bookmarking the website.
     capable: true,
     statusBarStyle: "default",
     title: "Agency CRM",
@@ -30,9 +25,10 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="min-h-full flex flex-col">
-        <AuthProvider>{children}</AuthProvider>
+        <ThemeProvider>
+          <AuthProvider>{children}</AuthProvider>
+        </ThemeProvider>
 
-        {/* Register the service worker after the app becomes interactive */}
         <Script id="register-service-worker" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {

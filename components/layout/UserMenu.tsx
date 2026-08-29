@@ -6,11 +6,6 @@ import { LogOut, Settings, User } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-/**
- * UserMenu — the account avatar dropdown in TopNav (Profile / Settings /
- * Sign out). Reads the real logged-in user from useAuth(); Sign out calls
- * Supabase auth.signOut() and redirects to /login.
- */
 export function UserMenu() {
   const { user, signOut } = useAuth();
   const router = useRouter();
@@ -23,38 +18,68 @@ export function UserMenu() {
 
   useEffect(() => {
     if (!open) return;
+
     function onClickOutside(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setOpen(false);
       }
     }
+
     function onKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
     }
+
     document.addEventListener("mousedown", onClickOutside);
     document.addEventListener("keydown", onKeyDown);
+
     return () => {
       document.removeEventListener("mousedown", onClickOutside);
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
 
+  function navigate(path: string) {
+    setOpen(false);
+    router.push(path);
+  }
+
   async function handleSignOut() {
     setSigningOut(true);
+
     await signOut();
+
     router.push("/login");
     router.refresh();
   }
 
   const menuItems = [
-    { label: "Profile", icon: User, onClick: () => setOpen(false) },
-    { label: "Settings", icon: Settings, onClick: () => setOpen(false) },
-    { label: signingOut ? "Signing out…" : "Sign out", icon: LogOut, onClick: handleSignOut, destructive: true },
+    {
+      label: "Profile",
+      icon: User,
+      onClick: () => navigate("/profile"),
+    },
+    {
+      label: "Settings",
+      icon: Settings,
+      onClick: () => navigate("/settings"),
+    },
+    {
+      label: signingOut ? "Signing out…" : "Sign out",
+      icon: LogOut,
+      onClick: handleSignOut,
+      destructive: true,
+    },
   ];
 
   return (
     <div ref={containerRef} className="relative">
       <button
+        type="button"
         onClick={() => setOpen((v) => !v)}
         aria-haspopup="menu"
         aria-expanded={open}
@@ -70,12 +95,21 @@ export function UserMenu() {
           className="absolute right-0 top-full z-30 mt-2 w-52 rounded-[var(--radius-lg)] border border-line bg-surface py-1 shadow-[var(--shadow-dialog)]"
         >
           <div className="border-b border-line px-3 py-2">
-            <p className="truncate text-sm font-medium text-ink">{name}</p>
-            {user?.email && <p className="truncate text-xs text-slate">{user.email}</p>}
+            <p className="truncate text-sm font-medium text-ink">
+              {name}
+            </p>
+
+            {user?.email && (
+              <p className="truncate text-xs text-slate">
+                {user.email}
+              </p>
+            )}
           </div>
+
           <div className="py-1">
             {menuItems.map((item) => (
               <button
+                type="button"
                 key={item.label}
                 role="menuitem"
                 disabled={item.label.includes("…")}
@@ -87,7 +121,10 @@ export function UserMenu() {
                     : "text-ink hover:bg-paper"
                 )}
               >
-                <item.icon className="h-4 w-4" aria-hidden="true" />
+                <item.icon
+                  className="h-4 w-4"
+                  aria-hidden="true"
+                />
                 {item.label}
               </button>
             ))}

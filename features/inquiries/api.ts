@@ -47,3 +47,15 @@ export async function updateInquiryStatus(
   const { error } = await supabase.from("inquiries").update({ status }).eq("id", id);
   if (error) throw new Error(error.message);
 }
+
+export async function deleteInquiry(
+  supabase: SupabaseClient,
+  id: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("inquiries")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+}

@@ -104,3 +104,15 @@ export async function convertLeadToClient(
   await updateLeadStatus(supabase, leadId, "won");
   return client;
 }
+
+export async function deleteClient(
+  supabase: SupabaseClient,
+  id: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("clients")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+}

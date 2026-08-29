@@ -81,3 +81,15 @@ export async function convertInquiryToLead(
   await updateInquiryStatus(supabase, inquiryId, "converted_to_lead");
   return lead;
 }
+
+export async function deleteLead(
+  supabase: SupabaseClient,
+  id: string
+): Promise<void> {
+  const { error } = await supabase
+    .from("leads")
+    .delete()
+    .eq("id", id);
+
+  if (error) throw new Error(error.message);
+}
