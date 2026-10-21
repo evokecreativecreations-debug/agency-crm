@@ -226,7 +226,7 @@ export function ProjectFilesCard({
           </p>
         </div>
 
-        <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-ink px-3 py-2 text-xs font-medium text-white transition-opacity hover:opacity-90">
+        <label className="inline-flex cursor-pointer items-center gap-2 rounded-md bg-ink px-3 py-2 text-xs font-medium text-surface transition-opacity hover:opacity-90">
           {uploading ? (
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
           ) : (

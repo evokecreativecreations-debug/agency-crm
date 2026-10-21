@@ -45,6 +45,12 @@ export function NotificationBell() {
     };
   }, [loadNotifications]);
 
+  useEffect(() => {
+    const refresh = () => { void loadNotifications(); };
+    window.addEventListener('crm-notifications-changed', refresh);
+    return () => window.removeEventListener('crm-notifications-changed', refresh);
+  }, [loadNotifications]);
+
   async function handleNotificationClick(notification: Notification) {
     try {
       await markNotificationAsRead(supabase, notification.id);
@@ -87,14 +93,14 @@ export function NotificationBell() {
       <button
         type="button"
         onClick={() => setOpen((current) => !current)}
-        className="relative inline-flex h-9 w-9 items-center justify-center rounded-md hover:bg-muted"
+        className="relative inline-flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] text-slate hover:bg-paper hover:text-ink"
         aria-label="Notifications"
         aria-expanded={open}
       >
         <Bell className="h-5 w-5" />
 
         {count > 0 && (
-          <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-destructive px-1 text-[10px] font-semibold text-destructive-foreground">
+          <span className="absolute -right-1 -top-1 flex min-h-5 min-w-5 items-center justify-center rounded-full bg-danger px-1 text-[10px] font-semibold text-white">
             {count > 99 ? "99+" : count}
           </span>
         )}

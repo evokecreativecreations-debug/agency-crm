@@ -6,6 +6,7 @@ import { Mail, MessageSquare, Search, Send } from "lucide-react";
 import type { Conversation, Message } from "@/types/message";
 import { getConversations, getMessages } from "@/features/messages/api";
 import { createClient } from "@/lib/supabase/client";
+import { EmailContent } from "./EmailContent";
 
 export function MessagesView() {
   const supabase = useMemo(() => createClient(), []);
@@ -332,20 +333,11 @@ export function MessagesView() {
                             </div>
 
                             <div className="mt-3">
-                              {message.body_html ? (
-                                <div
-                                  className="break-words text-sm leading-6 text-ink"
-                                  dangerouslySetInnerHTML={{
-                                    __html: sanitizeEmailHtml(
-                                      message.body_html
-                                    ),
-                                  }}
-                                />
-                              ) : (
-                                <p className="whitespace-pre-wrap break-words text-sm leading-6 text-ink">
-                                  {message.body_text || "(No message content)"}
-                                </p>
-                              )}
+                              <EmailContent
+                                html={message.body_html}
+                                text={message.body_text}
+                                subject={message.subject}
+                              />
                             </div>
                           </div>
                         </div>
@@ -386,7 +378,7 @@ export function MessagesView() {
                       type="button"
                       onClick={() => void handleSend()}
                       disabled={!messageText.trim() || sending}
-                      className="inline-flex items-center gap-2 rounded-md bg-ink px-4 py-2 text-xs font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
+                      className="inline-flex items-center gap-2 rounded-md bg-ink px-4 py-2 text-xs font-medium text-surface transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-40"
                     >
                       <Send className="h-3.5 w-3.5" />
                       {sending ? "Sending..." : "Send"}
@@ -428,20 +420,4 @@ function formatMessageDate(value: string): string {
     hour: "numeric",
     minute: "2-digit",
   }).format(date);
-}
-
-function sanitizeEmailHtml(html: string): string {
-  return html
-    .replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, "")
-    .replace(/<iframe[\s\S]*?>[\s\S]*?<\/iframe>/gi, "")
-    .replace(/<object[\s\S]*?>[\s\S]*?<\/object>/gi, "")
-    .replace(/<embed[\s\S]*?>/gi, "")
-    .replace(
-      /\son\w+\s*=\s*(".*?"|'.*?'|[^\s>]+)/gi,
-      ""
-    )
-    .replace(
-      /\s(href|src)\s*=\s*(['"])\s*javascript:[\s\S]*?\2/gi,
-      ""
-    );
 }

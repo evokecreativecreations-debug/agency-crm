@@ -22,8 +22,8 @@ const buttonStyles = cva(
   {
     variants: {
       variant: {
-        primary: "bg-signal text-white hover:bg-signal-hover",
-        secondary: "bg-ink text-white hover:bg-ink/90",
+        primary: "bg-signal text-on-signal hover:bg-signal-hover",
+        secondary: "bg-ink text-surface hover:bg-ink/90",
         outline: "border border-line-strong bg-surface text-ink hover:bg-paper",
         ghost: "bg-transparent text-ink hover:bg-paper",
         destructive: "bg-danger text-white hover:bg-danger/90",

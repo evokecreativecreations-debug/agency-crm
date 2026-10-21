@@ -29,7 +29,7 @@ const badgeStyles = cva(
         inquiry: "bg-paper text-stage-inquiry border border-line-strong",
         lead: "bg-info-soft text-stage-lead",
         client: "bg-signal-soft text-stage-client",
-        project: "bg-[#f2edfb] text-stage-project",
+        project: "bg-project-soft text-stage-project",
         invoice: "bg-warning-soft text-stage-invoice",
         paid: "bg-success-soft text-stage-paid",
       },

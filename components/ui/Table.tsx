@@ -14,14 +14,14 @@ import type { HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes } from "react";
  */
 export function Table({ className, ...props }: HTMLAttributes<HTMLTableElement>) {
   return (
-    <div className="w-full overflow-x-auto rounded-[var(--radius-lg)] border border-line">
+    <div className="w-full overflow-x-auto rounded-[var(--radius-lg)] border border-line bg-surface shadow-[var(--shadow-soft)]">
       <table className={cn("w-full border-collapse text-sm", className)} {...props} />
     </div>
   );
 }
 
 export function TableHead({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
-  return <thead className={cn("bg-paper", className)} {...props} />;
+  return <thead className={cn("bg-paper/60", className)} {...props} />;
 }
 
 export function TableBody({ className, ...props }: HTMLAttributes<HTMLTableSectionElement>) {
@@ -44,7 +44,7 @@ export function TableHeaderCell({
   return (
     <th
       className={cn(
-        "border-b border-line px-4 py-3 text-left text-xs font-medium uppercase tracking-[0.04em] text-slate",
+        "border-b border-line px-5 py-4 text-left text-xs font-medium uppercase tracking-[0.04em] text-slate",
         className
       )}
       {...props}
@@ -56,5 +56,5 @@ export function TableCell({
   className,
   ...props
 }: TdHTMLAttributes<HTMLTableCellElement>) {
-  return <td className={cn("px-4 py-3 text-ink", className)} {...props} />;
+  return <td className={cn("px-5 py-4 text-ink", className)} {...props} />;
 }

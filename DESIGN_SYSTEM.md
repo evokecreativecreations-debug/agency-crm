@@ -1,6 +1,6 @@
 # DESIGN_SYSTEM.md — Agency CRM Design System
 
-**Status:** Phase 0.5 — Complete, pending your review
+**Status:** Modern workspace refresh implemented; light and dark themes supported
 **Live reference:** run the app and visit `/style-guide` and `/style-guide/layout-preview`
 **Rule:** No feature component should hardcode a color, spacing, radius, or font size. Always use a token or a component from this system. If something you need doesn't exist yet, ask before inventing a one-off style.
 
@@ -9,7 +9,7 @@
 ## 1. Design Principles
 
 - **Premium, minimal, modern** — a professional creative-agency dashboard, not a generic admin template.
-- **Warm-neutral, not stark.** Backgrounds are off-white (`--color-paper`), not pure white or pure black — easier on the eyes for a tool used all day.
+- **Soft neutral surfaces.** Backgrounds are off-white (`--color-paper`), not pure white or pure black — easier on the eyes for a tool used all day.
 - **One confident accent, used with intention.** `--color-signal` (deep emerald) marks the single primary action or active state per screen — not applied everywhere just because it's the brand color.
 - **Status is always color + label, never color alone** (accessibility — colorblind-safe).
 - **Consistent focus rings** on every interactive element (visible keyboard navigation).
@@ -23,14 +23,14 @@ Every stage of your business pipeline (Inquiry → Lead → Client → Project �
 
 | Token | Hex | Use |
 |---|---|---|
-| `--color-paper` | `#FAFAF8` | Page background |
+| `--color-paper` | `#F6F7F9` | Page background |
 | `--color-surface` | `#FFFFFF` | Cards, panels, inputs |
-| `--color-line` | `#E6E4E0` | Default borders/dividers |
-| `--color-line-strong` | `#D4D1CB` | Input borders, stronger dividers |
-| `--color-ink` | `#17171A` | Primary text |
-| `--color-slate` | `#6B6B72` | Secondary text |
-| `--color-muted` | `#A3A2A8` | Placeholder/disabled text |
-| `--color-signal` | `#0E6B5C` | Primary actions, active nav, focus ring |
+| `--color-line` | `#E8EAEE` | Default borders/dividers |
+| `--color-line-strong` | `#D4D9E1` | Input borders, stronger dividers |
+| `--color-ink` | `#19212D` | Primary text |
+| `--color-slate` | `#697386` | Secondary text |
+| `--color-muted` | `#8892A2` | Placeholder/disabled text |
+| `--color-signal` | `#107C66` | Primary actions, active nav, focus ring |
 | `--color-amber` | `#C2760C` | Secondary accent — used sparingly |
 | `--color-success` | `#1C8A5E` | Positive status (Paid, Active) |
 | `--color-warning` | `#C2760C` | Caution status (Due Soon) |
@@ -83,10 +83,10 @@ Uses Tailwind's default 4px-based scale. Don't invent custom pixel values — pi
 
 | Token | Value | Use |
 |---|---|---|
-| `--radius-sm` | 6px | Badges, small buttons |
-| `--radius-md` | 10px | Buttons, inputs (default) |
-| `--radius-lg` | 14px | Cards, panels |
-| `--radius-xl` | 20px | Dialogs |
+| `--radius-sm` | 8px | Badges, small buttons |
+| `--radius-md` | 12px | Buttons, inputs (default) |
+| `--radius-lg` | 18px | Cards, panels |
+| `--radius-xl` | 24px | Dialogs |
 | `--shadow-soft` | subtle 2-layer shadow | Cards |
 | `--shadow-dialog` | stronger shadow | Dialogs, drawers |
 
@@ -171,7 +171,7 @@ Library: [`lucide-react`](https://lucide.dev) — lightweight, consistent stroke
 
 ## 10. Future Improvements (Not Built Yet)
 
-- Dark mode (token structure supports it later, not implemented now)
+- Additional theme palettes (light/dark themes and a header switch are already implemented)
 - Toast/notification popups (separate from the Notification Center — Phase 12)
 - Select/Dropdown, Checkbox, Radio, DatePicker components (will be added when the first feature that needs them is built, e.g. Leads status dropdown in Phase 3)
 - Real avatar images (currently initials placeholder)
@@ -188,3 +188,29 @@ Nothing above will be built until you approve it.
 2. Visit `http://localhost:3000/style-guide` — every token and component in one place.
 3. Visit `http://localhost:3000/style-guide/layout-preview` — Sidebar + TopNav + PageHeader working together. Resize your browser or open on your phone to see the responsive drawer behavior.
 4. Neither page is a real feature — both are safe to keep as permanent internal documentation, or removed later.
+
+
+## Modern workspace refresh
+
+- Emerald remains the primary action color; most surfaces and icons are neutral.
+- Shared cards use an 18px radius and quiet borders; page headers use a clearer
+  title/description hierarchy with consistent space between sections.
+- Sidebar navigation is grouped into Workspace, Manage and Finance. The desktop
+  sidebar retains its collapse preference; the mobile drawer traps keyboard
+  focus, closes on Escape and returns focus to its opener.
+- The header uses a single row with a light/dark theme switch, notifications and
+  account actions. The previous decorative global search field is omitted;
+  working module-level searches are preserved.
+- Dashboard metrics use existing data only. Financial and completion progress
+  indicators derive from recorded invoice, payment, project and task totals.
+  No invented growth figures or historical charts are displayed.
+- Mobile metric cards use two columns with compact spacing; financial panels
+  stack vertically. Tables scroll within their own panel when necessary.
+- New shared tokens: --color-on-signal (accessible button text per theme),
+  --color-brand-panel, --color-overlay, --color-project-soft, --color-sidebar,
+  --color-sidebar-hover, --sidebar-width, --sidebar-width-collapsed,
+  --content-max-width, --text-metric, --text-financial and --text-section.
+- The public /style-guide/layout-preview reference is clearly labelled Sample
+  data. It reuses the real dashboard components and does not fetch private
+  account menus or notifications.
+- The theme toggle uses the existing ThemeProvider and saved theme preference.

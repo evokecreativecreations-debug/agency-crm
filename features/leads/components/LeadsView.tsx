@@ -1,5 +1,7 @@
 "use client";
 
+import { FollowupDialog } from "./FollowupDialog";
+import { CalendarClock } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Dialog } from "@/components/ui/Dialog";
@@ -63,6 +65,7 @@ export function LeadsView({
   convertedLeadIds,
 }: LeadsViewProps) {
   const router = useRouter();
+  const [followupLead, setFollowupLead] = useState<Lead | null>(null);
 
   const [leads, setLeads] = useState(initialLeads);
   const [convertedIds, setConvertedIds] = useState(
@@ -325,6 +328,7 @@ export function LeadsView({
 
                   <TableCell>
                     <div className="flex items-center gap-1">
+                      <Button variant="ghost" size="sm" onClick={() => setFollowupLead(lead)}><CalendarClock className="h-4 w-4" />Follow up</Button>
                       {!isConverted && (
                         <Button
                           variant="ghost"
@@ -360,6 +364,7 @@ export function LeadsView({
         </Table>
       )}
 
+      <FollowupDialog lead={followupLead} onClose={() => setFollowupLead(null)} onContacted={(id, at) => setLeads(prev => prev.map(lead => lead.id === id ? { ...lead, last_contacted_at: at } : lead))} />
       <ConvertLeadDialog
         key={convertingLead?.id ?? "none"}
         open={convertingLead !== null}

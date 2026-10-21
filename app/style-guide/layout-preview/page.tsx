@@ -1,71 +1,29 @@
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { PageHeader } from "@/components/ui/PageHeader";
 import { DashboardShell } from "@/components/layout/DashboardShell";
-import { Plus } from "lucide-react";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { DashboardAnalytics } from "@/features/dashboard/components/DashboardAnalytics";
+import { QuickActions } from "@/features/dashboard/components/QuickActions";
+import { Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell } from "@/components/ui/Table";
+import { Badge } from "@/components/ui/Badge";
+import { CalendarDays } from "lucide-react";
 
-/**
- * /style-guide/layout-preview — shows Sidebar + TopNav + PageHeader working
- * together via DashboardShell, with placeholder content. Resize the
- * browser (or view on your phone) to see the sidebar collapse into a
- * drawer below the "md" breakpoint. Not a real feature/page.
- */
+// Explicit sample data for the public design reference, never live CRM records.
 export default function LayoutPreviewPage() {
   return (
-    <DashboardShell pageTitle="Dashboard" unreadCount={3}>
-      <PageHeader
-        eyebrow="Overview"
-        title="Good morning, Rameez"
-        description="Here's what's happening across your agency."
-        actions={
-          <>
-            <Button size="sm" variant="outline">
-              <Plus className="h-3.5 w-3.5" /> New Lead
-            </Button>
-            <Button size="sm" variant="outline">
-              <Plus className="h-3.5 w-3.5" /> New Client
-            </Button>
-            <Button size="sm">
-              <Plus className="h-3.5 w-3.5" /> New Project
-            </Button>
-          </>
-        }
-      />
-
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {[
-          ["New Inquiries", "4", "neutral"],
-          ["Active Leads", "7", "info"],
-          ["Active Projects", "5", "project"],
-          ["Unpaid Invoices", "2", "warning"],
-        ].map(([label, value, variant]) => (
-          <Card key={label as string}>
-            <CardContent>
-              <p className="text-xs font-medium uppercase tracking-wide text-slate">
-                {label}
-              </p>
-              <p className="mt-2 text-2xl font-semibold text-ink">{value}</p>
-              <Badge variant={variant as never} className="mt-2">
-                Live
-              </Badge>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="mt-6">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <p className="text-sm text-slate">
-              This is placeholder content only — the real Activity Log feed
-              is built in Phase 11.
-            </p>
-          </CardContent>
-        </Card>
+    <DashboardShell pageTitle="Dashboard" preview>
+      <div className="space-y-8">
+        <PageHeader eyebrow="Design preview · Sample data" title="Overview" description="A clear view of your sales, client work and cash flow."
+          actions={<div className="flex items-center gap-2 rounded-[var(--radius-md)] border border-line bg-surface px-3 py-2"><CalendarDays className="h-4 w-4 text-slate" aria-hidden="true" /><span className="text-xs text-slate">Workspace overview</span></div>} />
+        <DashboardAnalytics analytics={{totalLeads:48,wonLeads:18,conversionRate:37.5,totalProjects:24,activeProjects:8,completedProjects:16,totalTasks:86,completedTasks:62,taskCompletionRate:72.1,totalInvoiced:42500,totalPaid:34250,outstandingRevenue:8250}} />
+        <QuickActions />
+        <section aria-labelledby="table-preview-title" className="space-y-4">
+          <div className="flex items-center justify-between gap-3"><h2 id="table-preview-title" className="crm-section-title text-ink">Client list · component preview</h2><span className="text-xs text-slate">Sample records</span></div>
+          <Table><TableHead><TableRow><TableHeaderCell>Client</TableHeaderCell><TableHeaderCell>Project</TableHeaderCell><TableHeaderCell>Status</TableHeaderCell><TableHeaderCell>Invoice</TableHeaderCell></TableRow></TableHead>
+            <TableBody>
+              <TableRow><TableCell><span className="font-medium">Northstar Studio</span><span className="mt-1 block text-xs text-slate">Brand identity</span></TableCell><TableCell>Visual identity system</TableCell><TableCell><Badge variant="project">In progress</Badge></TableCell><TableCell className="tabular-nums">$2,400</TableCell></TableRow>
+              <TableRow><TableCell><span className="font-medium">Arcade Works</span><span className="mt-1 block text-xs text-slate">Game studio</span></TableCell><TableCell>Inventory interface</TableCell><TableCell><Badge variant="success">Completed</Badge></TableCell><TableCell className="tabular-nums">$3,200</TableCell></TableRow>
+            </TableBody>
+          </Table>
+        </section>
       </div>
     </DashboardShell>
   );

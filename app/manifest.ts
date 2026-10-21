@@ -9,9 +9,9 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Agency CRM",
     short_name: "Agency CRM",
     description: "Internal CRM — inquiries to invoices, in one place.",
-    // Points to "/" for now since the dashboard doesn't exist until Phase 1.
-    // We'll update this to "/dashboard" once Authentication is built.
-    start_url: "/",
+    id: "/",
+    scope: "/",
+    start_url: "/dashboard",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: "#111111",

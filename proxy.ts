@@ -4,11 +4,13 @@ import { updateSession } from "@/lib/supabase/middleware";
 /**
  * Route protection. Mirrors the module list in lib/navigation.ts — if a
  * new dashboard module is added there, add its path prefix here too.
- * "/" and "/style-guide" stay public on purpose (Phase 0 status page and
- * the internal design-system reference).
+ * The root redirects into the protected dashboard. The style guide remains
+ * public and contains design examples only.
  */
 const PROTECTED_PREFIXES = [
   "/dashboard",
+  "/today",
+  "/quotations",
   "/inquiries",
   "/leads",
   "/clients",
@@ -18,6 +20,9 @@ const PROTECTED_PREFIXES = [
   "/messages",
   "/files",
   "/services",
+  "/notifications",
+  "/profile",
+  "/settings",
 ];
 
 const PUBLIC_ONLY_PATHS = ["/login"];
@@ -43,11 +48,15 @@ export async function proxy(request: NextRequest) {
   if (isProtected && !user) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirectTo", pathname);
-    return NextResponse.redirect(loginUrl);
+    const redirect = NextResponse.redirect(loginUrl);
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
   }
 
   if (isPublicOnly && user) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+    const redirect = NextResponse.redirect(new URL("/dashboard", request.url));
+    response.cookies.getAll().forEach((cookie) => redirect.cookies.set(cookie));
+    return redirect;
   }
 
   return response;

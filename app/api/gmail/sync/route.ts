@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 
 import { createGmailClient } from "@/lib/gmail/client";
 import { createServiceClient } from "@/lib/supabase/service";
@@ -160,8 +161,17 @@ function parseDate(value: string | null): string {
   return new Date(timestamp).toISOString();
 }
 
-export async function GET() {
+export async function POST(request: Request) {
   try {
+    const session = await createClient();
+    const { data: { user }, error: userError } = await session.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    const origin = request.headers.get("origin");
+    if (origin && origin !== new URL(request.url).origin) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
     const supabase = createServiceClient();
 
     const { data: connection, error: connectionError } =
@@ -501,8 +511,9 @@ export async function GET() {
       message:
         "Gmail messages synced and existing messages refreshed successfully.",
     });
-  } catch (error) {
-    console.error("Gmail sync error:", error);
+  } catch {
+    // Do not log Google request objects containing authorization headers.
+    console.error("Gmail sync failed");
 
     return NextResponse.json(
       {

@@ -31,17 +31,47 @@ create index if not exists clients_created_at_idx on public.clients (created_at 
 -- policy; clients are never created by the public website directly.
 alter table public.clients enable row level security;
 
-create policy "Authenticated users can view clients"
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'clients'
+      and policyname = 'Authenticated users can view clients'
+  ) then
+    create policy "Authenticated users can view clients"
   on public.clients for select
   using (auth.role() = 'authenticated');
+  end if;
+end;
+$$;
 
-create policy "Authenticated users can insert clients"
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'clients'
+      and policyname = 'Authenticated users can insert clients'
+  ) then
+    create policy "Authenticated users can insert clients"
   on public.clients for insert
   with check (auth.role() = 'authenticated');
+  end if;
+end;
+$$;
 
-create policy "Authenticated users can update clients"
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public' and tablename = 'clients'
+      and policyname = 'Authenticated users can update clients'
+  ) then
+    create policy "Authenticated users can update clients"
   on public.clients for update
   using (auth.role() = 'authenticated');
+  end if;
+end;
+$$;
 
 -- No delete policy — same reasoning as "inquiries" and "leads": clients
 -- are never deleted through the app for now. Can be added later if you

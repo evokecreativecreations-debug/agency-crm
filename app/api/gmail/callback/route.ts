@@ -1,4 +1,7 @@
 import { NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { timingSafeEqual } from "node:crypto";
+import { createClient } from "@/lib/supabase/server";
 import {
   createGmailClient,
   getGmailTokens,
@@ -7,7 +10,21 @@ import { createServiceClient } from "@/lib/supabase/service";
 
 export async function GET(request: Request) {
   try {
+    const supabaseSession = await createClient();
+    const { data: { user }, error: userError } = await supabaseSession.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const url = new URL(request.url);
+    const cookieStore = await cookies();
+    const expectedState = cookieStore.get("gmail_oauth_state")?.value;
+    const state = url.searchParams.get("state");
+    if (!state || !expectedState || !state.startsWith(`${user.id}.`) ||
+        Buffer.byteLength(state) !== Buffer.byteLength(expectedState) ||
+        !timingSafeEqual(Buffer.from(state), Buffer.from(expectedState))) {
+      return NextResponse.json({ error: "Invalid or expired OAuth state" }, { status: 400 });
+    }
+    cookieStore.set("gmail_oauth_state", "", { path: "/api/gmail", maxAge: 0 });
 
     const code = url.searchParams.get("code");
     const error = url.searchParams.get("error");
@@ -52,7 +69,8 @@ export async function GET(request: Request) {
         {
           email,
           access_token: tokens.access_token,
-          refresh_token: tokens.refresh_token ?? null,
+          // Google may omit refresh_token on reconnect. Preserve the stored token.
+          ...(tokens.refresh_token ? { refresh_token: tokens.refresh_token } : {}),
           expiry_date: tokens.expiry_date
             ? new Date(tokens.expiry_date).toISOString()
             : null,
@@ -73,8 +91,9 @@ export async function GET(request: Request) {
       email,
       message: "Gmail account connected successfully.",
     });
-  } catch (error) {
-    console.error("Gmail callback error:", error);
+  } catch {
+    // OAuth errors can contain tokens in their request metadata.
+    console.error("Gmail callback failed");
 
     return NextResponse.json(
       { error: "Failed to complete Gmail authentication" },

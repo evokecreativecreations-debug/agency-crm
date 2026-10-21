@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Script from "next/script";
 
 import "./globals.css";
@@ -19,6 +19,12 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#111111",
+};
+
 export default function RootLayout({
   children,
 }: LayoutProps<"/">) {
@@ -32,9 +38,7 @@ export default function RootLayout({
         <Script id="register-service-worker" strategy="afterInteractive">
           {`
             if ('serviceWorker' in navigator) {
-              window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js').catch(() => {});
-              });
+              navigator.serviceWorker.register('/sw.js', { updateViaCache: 'none' }).catch(() => {});
             }
           `}
         </Script>

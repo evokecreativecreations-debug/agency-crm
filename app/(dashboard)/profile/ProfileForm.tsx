@@ -105,7 +105,7 @@ export function ProfileForm({
       <button
         type="submit"
         disabled={loading}
-        className="rounded-[var(--radius-sm)] bg-ink px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
+        className="rounded-[var(--radius-sm)] bg-ink px-4 py-2 text-sm font-medium text-surface transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading ? "Saving…" : "Save changes"}
       </button>

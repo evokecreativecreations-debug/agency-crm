@@ -84,7 +84,7 @@ export function UserMenu() {
         aria-haspopup="menu"
         aria-expanded={open}
         aria-label="Account menu"
-        className="flex h-8 w-8 items-center justify-center rounded-full bg-ink text-xs font-medium text-white transition-opacity hover:opacity-90"
+        className="flex h-9 w-9 items-center justify-center rounded-full bg-signal-soft text-xs font-semibold text-signal transition-opacity hover:opacity-90"
       >
         {initials}
       </button>

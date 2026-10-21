@@ -50,18 +50,47 @@ export function Dialog({
   const triggerRef = useRef<Element | null>(null);
 
   useEffect(() => {
-    if (open) {
-      triggerRef.current = document.activeElement;
-      dialogRef.current?.focus();
-    } else {
-      (triggerRef.current as HTMLElement | null)?.focus?.();
-    }
+    if (!open) return;
+    triggerRef.current = document.activeElement;
+    dialogRef.current?.focus();
+    return () => {
+      const trigger = triggerRef.current as HTMLElement | null;
+      if (trigger?.isConnected) trigger.focus?.();
+    };
   }, [open]);
 
   useEffect(() => {
     if (!open) return;
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === "Escape") onClose();
+      if (e.key === "Tab" && dialogRef.current) {
+        const nodes = [
+          ...dialogRef.current.querySelectorAll<HTMLElement>(
+            'button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), a[href], [tabindex="0"]',
+          ),
+        ].filter((n) => n.getClientRects().length);
+        const first = nodes[0],
+          last = nodes[nodes.length - 1];
+        if (!first) {
+          e.preventDefault();
+          return;
+        }
+        if (
+          e.shiftKey &&
+          (document.activeElement === first ||
+            document.activeElement === dialogRef.current)
+        ) {
+          e.preventDefault();
+          last.focus();
+        } else if (
+          !e.shiftKey &&
+          (document.activeElement === last ||
+            document.activeElement === dialogRef.current)
+        ) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     }
     document.addEventListener("keydown", onKeyDown);
     document.body.style.overflow = "hidden";
@@ -77,7 +106,7 @@ export function Dialog({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-ink/40"
+        className="absolute inset-0 bg-overlay/40"
         onClick={onClose}
         aria-hidden="true"
       />
@@ -89,17 +118,19 @@ export function Dialog({
         aria-labelledby="dialog-title"
         tabIndex={-1}
         className={cn(
-          "relative z-10 w-full rounded-[var(--radius-xl)] bg-surface shadow-[var(--shadow-dialog)]",
+          "relative z-10 flex max-h-[90dvh] w-full flex-col rounded-[var(--radius-xl)] bg-surface shadow-[var(--shadow-dialog)]",
           SIZE_CLASS[size],
-          "focus:outline-none"
+          "focus:outline-none",
         )}
       >
-        <div className="flex items-start justify-between gap-4 border-b border-line px-5 py-4">
+        <div className="flex shrink-0 items-start justify-between gap-4 border-b border-line px-5 py-4">
           <div>
             <h2 id="dialog-title" className="text-base font-semibold text-ink">
               {title}
             </h2>
-            {description && <p className="mt-1 text-sm text-slate">{description}</p>}
+            {description && (
+              <p className="mt-1 text-sm text-slate">{description}</p>
+            )}
           </div>
           <button
             onClick={onClose}
@@ -109,14 +140,14 @@ export function Dialog({
             <X className="h-4 w-4" />
           </button>
         </div>
-        <div className="px-5 py-4">{children}</div>
+        <div className="min-h-0 overflow-y-auto px-5 py-4">{children}</div>
         {footer && (
-          <div className="flex items-center justify-end gap-2 border-t border-line px-5 py-3">
+          <div className="flex shrink-0 items-center justify-end gap-2 border-t border-line px-5 py-3">
             {footer}
           </div>
         )}
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }

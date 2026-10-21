@@ -387,3 +387,45 @@ Git push          → PASS
 - [x] TypeScript verified
 - [x] Production build verified
 - [x] Git changes ready for commit
+
+## CRM security and reliability fixes
+
+- [x] Gmail authentication and OAuth state checks
+- [x] Protected Profile, Settings and Notifications
+- [x] Restricted login redirects and sandboxed email HTML
+- [x] Fresh database migration order corrected
+- [x] Transactional, retry-safe inquiry conversion implemented and tested locally
+- [x] PWA dashboard start and offline fallback corrected
+- [x] Existing invoice/payment lint errors corrected
+- [x] 24 regression tests passed
+- [x] Default production build passed
+- [x] Apply atomic conversion migration to the existing live Supabase database (approved by Rameez; SQL execution succeeded)
+- [ ] Verify authenticated flows and real iPhone installation
+
+Website integration and deployment remain outside this fixes batch.
+
+
+## Modern workspace UI
+
+- [x] Shared light and dark visual tokens polished
+- [x] Sidebar, header, metric cards and financial overview refreshed
+- [x] Mobile drawer and desktop sidebar interactions checked
+- [x] Sample-data preview added to the existing style guide route
+- [x] Lint, TypeScript, production build and existing 24 regression tests passed
+- [ ] Real iPhone/Safari installation and authenticated end-to-end verification
+
+### Approved October 21 batch
+
+- [x] Personal lead follow-ups and last-contact tracking
+- [x] Today screen: reminders, task/project deadlines, pending invoice balances
+- [x] Quotations and private quotation/invoice PDFs
+- [x] Service catalog pricing, item totals, discount/tax and requested advance
+- [x] Atomic accepted-quotation conversion; old invoice compatibility
+- [x] Isolated migration/security/billing tests and local browser/PDF checks
+- [ ] Apply the reviewed October 21 migration to live Supabase (owner approval)
+- [ ] Staging multi-session concurrency check before broader team rollout
+- [ ] Actual iPhone installation and device QA after Vercel deployment
+
+Future improvements (not built): background iPhone push, reusable proposal
+presets, document email sending/approval links, additional currencies/RTL PDFs.
+Marketing website changes and deployment remain outside this batch.

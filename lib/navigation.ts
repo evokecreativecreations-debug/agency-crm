@@ -1,5 +1,7 @@
 import {
   Briefcase,
+  CalendarClock,
+  Files,
   FileText,
   FolderKanban,
   Inbox,
@@ -22,11 +24,13 @@ export interface NavItem {
  * Mirrors the frozen module list in PROJECT.md.
  */
 export const navItems: NavItem[] = [
+  { label: "Today", href: "/today", icon: CalendarClock },
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Inquiries", href: "/inquiries", icon: Inbox },
   { label: "Leads", href: "/leads", icon: Users },
   { label: "Clients", href: "/clients", icon: Briefcase },
   { label: "Projects", href: "/projects", icon: FolderKanban },
+  { label: "Quotations", href: "/quotations", icon: Files },
   { label: "Invoices", href: "/invoices", icon: FileText },
   { label: "Payments", href: "/payments", icon: Wallet },
   { label: "Messages", href: "/messages", icon: MessageSquare },

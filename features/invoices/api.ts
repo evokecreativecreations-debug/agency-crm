@@ -1,3 +1,4 @@
+import { validateBilling } from './billing';
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type {
   Invoice,
@@ -18,9 +19,6 @@ import type {
  * getTaskById, getRevisionById, etc.) to stay consistent with the rest
  * of the codebase.
  */
-
-const INVOICE_NUMBER_PREFIX = "INV-";
-const INVOICE_NUMBER_PAD_LENGTH = 4;
 
 export async function getInvoices(
   supabase: SupabaseClient,
@@ -50,43 +48,23 @@ export async function getInvoiceById(
   return data as Invoice | null;
 }
 
-/**
- * Generates the next sequential invoice number (INV-0001, INV-0002, ...)
- * by looking at the single most recently created invoice across the
- * whole agency (invoice_number is globally unique per the blueprint, not
- * scoped per project — one numbering sequence company-wide, matching
- * standard invoicing practice). Not safe against a race between two
- * simultaneous creates, but the table's UNIQUE constraint on
- * invoice_number guarantees a collision fails loudly instead of silently
- * overwriting — acceptable for a single small team, per the brief.
- */
-async function generateNextInvoiceNumber(supabase: SupabaseClient): Promise<string> {
-  const { data, error } = await supabase
-    .from("invoices")
-    .select("invoice_number")
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (error) throw new Error(error.message);
-
-  const match = data?.invoice_number.match(/(\d+)$/);
-  const nextNumber = match ? parseInt(match[1], 10) + 1 : 1;
-
-  return `${INVOICE_NUMBER_PREFIX}${String(nextNumber).padStart(INVOICE_NUMBER_PAD_LENGTH, "0")}`;
-}
-
 export async function createInvoice(
   supabase: SupabaseClient,
   input: NewInvoiceInput
 ): Promise<Invoice> {
-  const invoiceNumber = await generateNextInvoiceNumber(supabase);
+  validateBilling(input);
 
   const { data, error } = await supabase
     .from("invoices")
     .insert({
       project_id: input.project_id,
-      invoice_number: invoiceNumber,
+      invoice_number: "AUTO",
+      line_items: input.line_items,
+      discount_amount: input.discount_amount,
+      tax_rate: input.tax_rate,
+      deposit_amount: input.deposit_amount,
+      notes: input.notes,
+      payment_terms: input.payment_terms,
       amount: input.amount,
       due_date: input.due_date || null,
       status: "draft",

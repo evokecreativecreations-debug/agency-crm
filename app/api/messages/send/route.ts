@@ -9,6 +9,11 @@ type SendMessageBody = {
 
 export async function POST(request: Request) {
   try {
+    const supabase = await createClient();
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
     const body = (await request.json()) as SendMessageBody;
 
     if (!body.conversationId || !body.bodyText?.trim()) {
@@ -27,8 +32,6 @@ export async function POST(request: Request) {
         { status: 500 }
       );
     }
-
-    const supabase = await createClient();
 
     const { data: conversation, error: conversationError } =
       await supabase

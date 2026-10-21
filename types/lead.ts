@@ -11,6 +11,7 @@ export interface Lead {
   notes: string | null;
   status: LeadStatus;
   created_at: string;
+  last_contacted_at?: string | null;
 }
 
 /** Fields required to create a lead (from an inquiry conversion, or later, manually). */

@@ -144,3 +144,11 @@ The next phase is a final PWA and responsive QA pass across the CRM.
 
 - iPhone PWA installation test
 - Responsive QA across all CRM modules
+## Approved feature extension — October 21, 2026
+
+Rameez approved the follow-ups, Today and quotation/PDF billing batch. It fits
+within the existing leads, dashboard, notifications and invoices modules and
+keeps the Next.js/Supabase/Tailwind/PWA stack and top-level folder structure.
+The necessary local schema extension is in the October 21 migration. Live
+activation is separate from implementation and requires review of that migration.
+No marketing website change or deployment is included in this batch.

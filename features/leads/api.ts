@@ -1,4 +1,3 @@
-import { updateInquiryStatus } from "@/features/inquiries/api";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { Lead, LeadStatus, NewLeadInput } from "@/types/lead";
 
@@ -61,25 +60,31 @@ export async function updateLeadStatus(
 }
 
 /**
- * Converts an inquiry into a lead: creates the lead (carrying over the
- * inquiry's contact details and linking back via inquiry_id), then marks
- * the source inquiry as "converted_to_lead". Reuses
- * features/inquiries/api.ts's updateInquiryStatus rather than duplicating
- * that logic here.
- *
- * If the lead is created successfully but the inquiry-status update
- * fails, the error is re-thrown so the caller can surface it — the lead
- * still exists either way, so no data is lost, but the inquiry's status
- * may need a manual retry.
+ * Atomically creates/reuses a lead and updates its inquiry in one database
+ * transaction. The RPC locks the inquiry so concurrent requests and retries
+ * return the same lead. Do not fall back to separate browser writes.
  */
 export async function convertInquiryToLead(
   supabase: SupabaseClient,
   inquiryId: string,
   input: Omit<NewLeadInput, "inquiry_id">
 ): Promise<Lead> {
-  const lead = await createLead(supabase, { ...input, inquiry_id: inquiryId });
-  await updateInquiryStatus(supabase, inquiryId, "converted_to_lead");
-  return lead;
+  const { data, error } = await supabase.rpc("convert_inquiry_to_lead", {
+    p_inquiry_id: inquiryId,
+    p_full_name: input.full_name,
+    p_email: input.email,
+    p_phone: input.phone || null,
+    p_notes: input.notes || null,
+  }).single();
+
+  if (error) {
+    if (error.code === "PGRST202" || error.code === "42883") {
+      throw new Error("Lead conversion needs the latest database migration. Please contact your administrator.");
+    }
+    throw new Error(error.message);
+  }
+  if (!data) throw new Error("Lead conversion returned no result.");
+  return data as Lead;
 }
 
 export async function deleteLead(

@@ -16,6 +16,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { Invoice, InvoiceStatus } from "@/types/invoice";
 import {
   CalendarDays,
+  Download,
   ChevronRight,
   Pencil,
   Plus,
@@ -189,6 +190,7 @@ export function InvoicesCard({
                       key={invoice.id}
                       className="group px-4 py-4 transition-colors hover:bg-soft/30 sm:px-5"
                     >
+                      <div className="mb-3 flex justify-end"><a href={`/api/billing/invoice/${invoice.id}/pdf`} className="inline-flex items-center gap-1.5 text-xs font-medium text-signal hover:underline"><Download className="h-3.5 w-3.5" />Download PDF</a></div>
                       {/* Desktop */}
                       <div className="hidden md:grid md:grid-cols-[minmax(180px,1fr)_150px_150px_190px] md:items-center md:gap-4">
                         <button

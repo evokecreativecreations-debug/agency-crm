@@ -356,7 +356,7 @@ export function PaymentsCard({
               </p>
 
               <p className="mx-auto mt-1 max-w-sm text-xs text-slate">
-                Record the first payment to start tracking this invoice's
+                Record the first payment to start tracking this invoice&apos;s
                 collection progress.
               </p>
 

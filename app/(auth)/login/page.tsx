@@ -1,6 +1,7 @@
 "use client";
 
 import { createClient } from "@/lib/supabase/client";
+import { getSafeRedirect } from "@/features/auth/redirect";
 import { ArrowLeft, LockKeyhole, Mail } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState, type FormEvent } from "react";
@@ -48,7 +49,7 @@ function LoginForm() {
       return;
     }
 
-    window.location.href = redirectTo;
+    window.location.assign(getSafeRedirect(redirectTo, window.location.origin));
   }
 
   async function handleForgotPassword(
@@ -104,7 +105,7 @@ function LoginForm() {
     <main className="min-h-dvh bg-paper">
       <div className="grid min-h-dvh lg:grid-cols-2">
         {/* Brand panel */}
-        <section className="relative hidden overflow-hidden bg-ink lg:flex">
+        <section className="relative hidden overflow-hidden bg-brand-panel lg:flex">
           <div className="absolute inset-0 opacity-20">
             <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-signal blur-3xl" />
             <div className="absolute -bottom-32 -right-20 h-96 w-96 rounded-full bg-signal blur-3xl" />
@@ -113,7 +114,7 @@ function LoginForm() {
           <div className="relative flex w-full flex-col justify-between p-10 xl:p-14">
             <div>
               <div className="flex items-center gap-3">
-                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-signal text-sm font-bold text-white">
+                <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-signal text-sm font-bold text-on-signal">
                   A
                 </div>
 
@@ -149,7 +150,7 @@ function LoginForm() {
           <div className="w-full max-w-md">
             {/* Mobile brand */}
             <div className="mb-10 flex items-center gap-3 lg:hidden">
-              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-ink text-sm font-bold text-white">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[var(--radius-md)] bg-ink text-sm font-bold text-surface">
                 A
               </div>
 
@@ -258,7 +259,7 @@ function LoginForm() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-3 text-sm font-medium text-white transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-3 text-sm font-medium text-on-signal transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {loading ? "Signing in…" : "Sign in"}
                   </button>
@@ -352,7 +353,7 @@ function LoginForm() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-3 text-sm font-medium text-white transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
+                    className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-3 text-sm font-medium text-on-signal transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {loading ? "Sending…" : "Send reset link"}
                   </button>

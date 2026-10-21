@@ -92,7 +92,7 @@ export default function ResetPasswordPage() {
             <button
               type="button"
               onClick={() => router.push("/login")}
-              className="mt-6 w-full rounded-[var(--radius-md)] bg-signal px-4 py-2.5 text-sm font-medium text-white transition hover:bg-signal-hover"
+              className="mt-6 w-full rounded-[var(--radius-md)] bg-signal px-4 py-2.5 text-sm font-medium text-on-signal transition hover:bg-signal-hover"
             >
               Back to login
             </button>
@@ -190,7 +190,7 @@ export default function ResetPasswordPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-2.5 text-sm font-medium text-white transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
+              className="w-full rounded-[var(--radius-md)] bg-signal px-4 py-2.5 text-sm font-medium text-on-signal transition hover:bg-signal-hover disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? "Updating…" : "Update password"}
             </button>
